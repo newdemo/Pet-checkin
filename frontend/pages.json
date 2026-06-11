@@ -1,0 +1,84 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^status-bar$": "@/components/StatusBar.vue",
+      "^task-card$": "@/components/TaskCard.vue",
+      "^task-form-modal$": "@/components/TaskFormModal.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "萌宠打卡",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/tasks/index",
+      "style": {
+        "navigationBarTitleText": "今日任务",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/record/index",
+      "style": {
+        "navigationBarTitleText": "成长记录",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/parent/tasks/index",
+      "style": {
+        "navigationBarTitleText": "任务管理",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/parent/confirm/index",
+      "style": {
+        "navigationBarTitleText": "待确认",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "萌宠打卡",
+    "navigationBarBackgroundColor": "#FF8C42",
+    "backgroundColor": "#FFF8F0"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF8C42",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tab/home.png",
+        "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/tasks/index",
+        "text": "任务",
+        "iconPath": "static/tab/task.png",
+        "selectedIconPath": "static/tab/task-active.png"
+      },
+      {
+        "pagePath": "pages/record/index",
+        "text": "成长",
+        "iconPath": "static/tab/record.png",
+        "selectedIconPath": "static/tab/record-active.png"
+      }
+    ]
+  }
+}
