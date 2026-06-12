@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getGrowthProgress } from '../services/pet'
 import { MAX_LEVEL } from '../constants/pet'
-import { getAppData, performPetAction } from '../services/storage'
+import { getAppData, performPetAction, savePetName } from '../services/storage'
 
 export const usePetStore = defineStore('pet', () => {
   const pet = ref({
@@ -27,11 +27,19 @@ export const usePetStore = defineStore('pet', () => {
     return result
   }
 
+  function saveName(name) {
+    const result = savePetName(name)
+    if (result.ok) {
+      pet.value.name = name.trim()
+    }
+    return result
+  }
+
   const growthProgress = computed(() => {
     return getGrowthProgress(pet.value)
   })
 
   const isMaxLevel = computed(() => pet.value.level >= MAX_LEVEL)
 
-  return { pet, load, performAction, growthProgress, isMaxLevel }
+  return { pet, load, performAction, saveName, growthProgress, isMaxLevel }
 })

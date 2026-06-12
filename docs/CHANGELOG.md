@@ -4,6 +4,34 @@
 
 ---
 
+## [v1.3.1] — 2026-06-12（待验收）
+
+### P1-2 家长设置页
+
+新增家长设置页，支持修改宠物名称。
+
+### 新增
+- **`src/pages/parent/settings/index.vue`** — 设置页，宠物名称编辑 + 当前状态展示
+- **`src/services/storage.js`** — `savePetName()` 持久化函数
+- **`src/stores/pet.js`** — `saveName()` action，支持响应式更新
+
+### 修改
+- **`src/pages.json`** / **`pages.json`** — 注册 `pages/parent/settings/index` 路由
+- **`src/pages/parent/tasks/index.vue`** — 新增「⚙️ 更多设置」导航按钮
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/pages/parent/settings/index.vue` | ✅ 新建 |
+| `src/services/storage.js` | ✅ 新增 savePetName |
+| `src/stores/pet.js` | ✅ 新增 saveName |
+| `src/pages.json` | ✅ 注册路由 |
+| `pages.json` | ✅ 注册路由 |
+| `src/pages/parent/tasks/index.vue` | ✅ 添加导航入口 |
+
+---
+
 ## [v1.3.0] — 2026-06-11
 
 ### P1-1 验收通过

@@ -371,6 +371,19 @@ export function saveTaskTemplate(template) {
 }
 
 /**
+ * 设置页：修改宠物名称。
+ */
+export function savePetName(name) {
+  if (!name || !name.trim()) {
+    return { ok: false, message: '名称不能为空' }
+  }
+  const data = getAppData()
+  data.pet.name = name.trim()
+  writeStorage(data)
+  return { ok: true, message: '宠物名称已更新' }
+}
+
+/**
  * 删除任务模板。
  */
 export function deleteTaskTemplate(templateId) {

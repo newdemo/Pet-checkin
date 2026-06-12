@@ -26,6 +26,10 @@
       <button class="btn-reset" @click="onReset">重置所有数据（测试用）</button>
     </view>
 
+    <view class="nav-box">
+      <button class="btn-settings" @click="goSettings">⚙️ 更多设置</button>
+    </view>
+
     <task-form-modal
       :visible="modalVisible"
       :template="editingTemplate"
@@ -118,6 +122,10 @@ function onReset() {
       }
     }
   })
+}
+
+function goSettings() {
+  uni.navigateTo({ url: '/pages/parent/settings/index' })
 }
 
 onShow(() => {
@@ -226,5 +234,19 @@ onShow(() => {
 
 .btn-reset::after {
   border: none;
+}
+
+.nav-box {
+  margin-top: 24rpx;
+}
+
+.btn-settings {
+  width: 100%;
+  background: #fff;
+  color: #333;
+  font-size: 28rpx;
+  border-radius: 16rpx;
+  border: none;
+  text-align: center;
 }
 </style>
