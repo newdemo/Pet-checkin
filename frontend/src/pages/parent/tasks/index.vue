@@ -37,18 +37,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import {
-  getTaskTemplates,
-  toggleTaskTemplate,
-  saveTaskTemplate,
-  deleteTaskTemplate,
-  resetAllData
-} from '../../../services/storage'
+import { useTasksStore } from '../../../stores/tasks'
 import { ITEM_LABELS } from '../../../constants/pet'
 
-const templates = ref([])
+const tasksStore = useTasksStore()
+
+const templates = computed(() => tasksStore.taskTemplates)
 const modalVisible = ref(false)
 const editingTemplate = ref(null)
 
@@ -57,13 +53,12 @@ function rewardLabel(type) {
 }
 
 function loadTemplates() {
-  templates.value = getTaskTemplates()
+  tasksStore.loadTaskTemplates()
 }
 
 function onToggle(templateId, e) {
   const enabled = e.detail.value
-  toggleTaskTemplate(templateId, enabled)
-  loadTemplates()
+  tasksStore.toggleTaskTemplate(templateId, enabled)
   uni.showToast({ title: enabled ? '已开启' : '已关闭', icon: 'none' })
 }
 
@@ -83,14 +78,13 @@ function onCloseModal() {
 }
 
 function onSaveTemplate(formData) {
-  const result = saveTaskTemplate(formData)
+  const result = tasksStore.saveTaskTemplate(formData)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
   }
   modalVisible.value = false
   editingTemplate.value = null
-  loadTemplates()
   uni.showToast({ title: result.message, icon: 'success' })
 }
 
@@ -101,11 +95,10 @@ function onRemoveTemplate() {
     content: `确定要删除「${editingTemplate.value.name}」吗？`,
     success(res) {
       if (!res.confirm) return
-      const result = deleteTaskTemplate(editingTemplate.value.id)
+      const result = tasksStore.deleteTaskTemplate(editingTemplate.value.id)
       if (result.ok) {
         modalVisible.value = false
         editingTemplate.value = null
-        loadTemplates()
         uni.showToast({ title: '已删除', icon: 'success' })
       } else {
         uni.showToast({ title: result.message, icon: 'none' })
@@ -120,8 +113,7 @@ function onReset() {
     content: '将清空本地数据并恢复初始状态',
     success(res) {
       if (res.confirm) {
-        resetAllData()
-        loadTemplates()
+        tasksStore.resetAllData()
         uni.showToast({ title: '已重置', icon: 'success' })
       }
     }

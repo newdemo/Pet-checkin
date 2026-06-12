@@ -78,25 +78,22 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { onLoad, onShow } from '@dcloudio/uni-app'
-import { getHomeData, performPetAction, initAppData } from '../../services/storage'
-import { getGrowthProgress } from '../../services/pet'
-import { ACTION_MAP } from '../../constants/pet'
+import { computed } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
+import { initAppData } from '../../services/storage'
+import { usePetStore } from '../../stores/pet'
+import { useInventoryStore } from '../../stores/inventory'
+import { useTasksStore } from '../../stores/tasks'
 
-const pet = ref({
-  name: '小萌',
-  level: 1,
-  growthValue: 0,
-  hunger: 80,
-  cleanliness: 80,
-  mood: 80
-})
-const inventory = ref({ food: 0, soap: 0, toy: 0 })
-const taskStats = ref({ total: 0, done: 0, pending: 0 })
-const pendingConfirms = ref(0)
+const petStore = usePetStore()
+const inventoryStore = useInventoryStore()
+const tasksStore = useTasksStore()
 
-const growthProgress = computed(() => getGrowthProgress(pet.value))
+const pet = computed(() => petStore.pet)
+const inventory = computed(() => inventoryStore.inventory)
+const taskStats = computed(() => tasksStore.taskStats)
+const pendingConfirms = computed(() => tasksStore.pendingConfirmsCount)
+const growthProgress = computed(() => petStore.growthProgress)
 
 const petEmoji = computed(() => {
   const emojis = ['🐣', '🐥', '🐤', '🦊', '🌟']
@@ -111,11 +108,9 @@ const moodPercent = computed(() => Math.min(100, Math.round((pet.value.mood || 0
 function loadData() {
   try {
     initAppData()
-    const data = getHomeData()
-    if (data.pet) pet.value = { ...pet.value, ...data.pet }
-    if (data.inventory) inventory.value = { ...data.inventory }
-    if (data.taskStats) taskStats.value = { ...data.taskStats }
-    pendingConfirms.value = data.pendingConfirms || 0
+    petStore.load()
+    inventoryStore.load()
+    tasksStore.loadAll()
   } catch (e) {
     console.error('home loadData failed', e)
     uni.showToast({ title: '数据加载失败', icon: 'none' })
@@ -123,14 +118,13 @@ function loadData() {
 }
 
 function onAction(type) {
-  const result = performPetAction(type)
+  const result = petStore.performAction(type)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
   }
-  pet.value = { ...result.pet }
-  inventory.value = { ...result.inventory }
-  const label = ACTION_MAP[type]?.label || '操作'
+  inventoryStore.load()
+  const labelMap = { feed: '喂食', wash: '清洁', play: '陪玩' }
   if (result.leveledUp) {
     uni.showModal({
       title: '升级啦！',
@@ -138,17 +132,13 @@ function onAction(type) {
       showCancel: false
     })
   } else {
-    uni.showToast({ title: `${label}成功！`, icon: 'success' })
+    uni.showToast({ title: `${labelMap[type] || '操作'}成功！`, icon: 'success' })
   }
 }
 
 function goParentConfirm() {
   uni.navigateTo({ url: '/pages/parent/confirm/index' })
 }
-
-onLoad(() => {
-  loadData()
-})
 
 onShow(() => {
   loadData()

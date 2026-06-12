@@ -29,19 +29,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import { getPendingConfirmations, reviewCheckin } from '../../../services/storage'
+import { useTasksStore } from '../../../stores/tasks'
 import { ITEM_LABELS } from '../../../constants/pet'
 
-const tasks = ref([])
+const tasksStore = useTasksStore()
+
+const tasks = computed(() => tasksStore.pendingConfirmations)
 
 function rewardLabel(type) {
   return ITEM_LABELS[type] || type
 }
 
 function loadTasks() {
-  tasks.value = getPendingConfirmations()
+  tasksStore.loadDailyTasks()
 }
 
 function onReview(taskId, approved) {
@@ -53,9 +55,8 @@ function onReview(taskId, approved) {
       : '驳回后孩子可重新打卡',
     success(res) {
       if (!res.confirm) return
-      const result = reviewCheckin(taskId, approved)
+      const result = tasksStore.reviewCheckin(taskId, approved)
       if (result.ok) {
-        loadTasks()
         uni.showToast({ title: result.message, icon: 'success' })
       } else {
         uni.showToast({ title: result.message, icon: 'none' })

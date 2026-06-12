@@ -18,7 +18,7 @@
 
 | 序号 | 任务 | 详情 | 依赖 |
 |------|------|------|------|
-| P1-1 | **引入 Pinia 状态管理** | 创建 `pet`、`tasks`、`inventory` stores，替换当前各页面手动 `onShow` 重新读取数据。实现页面间数据响应式同步。 | — |
+| P1-1 | **引入 Pinia 状态管理** | 创建 `pet`、`tasks`、`inventory` stores，替换当前各页面手动 `onShow` 重新读取数据。实现页面间数据响应式同步。<br>**文件：** `src/stores/pet.js`、`src/stores/tasks.js`、`src/stores/inventory.js` + 5 个页面改造。 | — | ✅ 已完成 |
 | P1-2 | **家长设置页** | 新建 `pages/parent/settings/index`，支持修改宠物名称。 | P1-1 建议先引入 Store |
 | P1-3 | **全局组件** | 实现 `UpgradeModal`（升级祝贺弹窗）、`EmptyState`（空状态插画占位）。当前临时用 `uni.showModal` 和页面内联空状态。 | — |
 | P1-4 | **角色切换机制** | 实现孩子/家长模式切换（可合并到首页弹窗或设置页），不需要账号体系，仅本地标记当前角色。 | P1-2 |

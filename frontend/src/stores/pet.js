@@ -1,0 +1,37 @@
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { getGrowthProgress } from '../services/pet'
+import { MAX_LEVEL } from '../constants/pet'
+import { getAppData, performPetAction } from '../services/storage'
+
+export const usePetStore = defineStore('pet', () => {
+  const pet = ref({
+    name: '小萌',
+    level: 1,
+    growthValue: 0,
+    hunger: 80,
+    cleanliness: 80,
+    mood: 80
+  })
+
+  function load() {
+    const data = getAppData()
+    pet.value = { ...data.pet }
+  }
+
+  function performAction(actionType) {
+    const result = performPetAction(actionType)
+    if (result.ok) {
+      pet.value = { ...result.pet }
+    }
+    return result
+  }
+
+  const growthProgress = computed(() => {
+    return getGrowthProgress(pet.value)
+  })
+
+  const isMaxLevel = computed(() => pet.value.level >= MAX_LEVEL)
+
+  return { pet, load, performAction, growthProgress, isMaxLevel }
+})

@@ -4,6 +4,46 @@
 
 ---
 
+## [v1.3.0] — 2026-06-11
+
+### P1-1 验收通过
+
+引入 Pinia 全局状态管理，替换各页面手动 `onShow` 读取 storage 的模式，实现页面间数据响应式同步。
+
+### 新增
+- **`src/stores/pet.js`** — pet store，管理宠物状态与养成操作（喂食/清洁/陪玩）
+- **`src/stores/inventory.js`** — inventory store，管理背包道具状态
+- **`src/stores/tasks.js`** — tasks store，管理任务模板、每日任务、打卡、审核、统计历史
+
+### 修改
+- **`src/main.js`** — 注册 Pinia 插件
+- **5 个页面** — 全部改为从 store 读取计算属性，操作通过 store 方法委托给 `services/storage.js`
+  - `pages/home/index.vue` — 使用 petStore + inventoryStore + tasksStore
+  - `pages/tasks/index.vue` — 使用 tasksStore
+  - `pages/parent/confirm/index.vue` — 使用 tasksStore
+  - `pages/parent/tasks/index.vue` — 使用 tasksStore
+  - `pages/record/index.vue` — 使用 petStore + tasksStore
+
+### 依赖
+- 新增 `pinia@2.3.1`（兼容 Vue 3.4.21）
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/stores/pet.js` | ✅ 新建 |
+| `src/stores/inventory.js` | ✅ 新建 |
+| `src/stores/tasks.js` | ✅ 新建 |
+| `src/main.js` | ✅ 注册 Pinia |
+| `src/pages/home/index.vue` | ✅ 改造 |
+| `src/pages/tasks/index.vue` | ✅ 改造 |
+| `src/pages/parent/confirm/index.vue` | ✅ 改造 |
+| `src/pages/parent/tasks/index.vue` | ✅ 改造 |
+| `src/pages/record/index.vue` | ✅ 改造 |
+| `package.json` | ✅ 新增 pinia 依赖 |
+
+---
+
 ## [v1.2.0] — 2026-06-11
 
 ### P0 验收通过

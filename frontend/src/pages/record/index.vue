@@ -40,15 +40,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import { getRecordData } from '../../services/storage'
+import { useTasksStore } from '../../stores/tasks'
+import { usePetStore } from '../../stores/pet'
 import { getWeekdayLabel } from '../../utils/date'
 
-const pet = ref({ level: 1 })
-const streakStat = ref({ currentStreak: 0, totalCompleted: 0 })
-const weekDays = ref([])
-const history = ref([])
+const tasksStore = useTasksStore()
+const petStore = usePetStore()
+
+const pet = computed(() => petStore.pet)
+const streakStat = computed(() => tasksStore.streakStat)
+const weekDays = computed(() => tasksStore.weekDays)
+const history = computed(() => tasksStore.history)
 
 function weekday(date) {
   return getWeekdayLabel(date)
@@ -60,11 +64,8 @@ function formatDay(dateStr) {
 }
 
 function loadData() {
-  const data = getRecordData()
-  pet.value = data.pet
-  streakStat.value = data.streakStat
-  weekDays.value = data.weekDays
-  history.value = data.history
+  petStore.load()
+  tasksStore.loadRecordData()
 }
 
 onShow(() => {

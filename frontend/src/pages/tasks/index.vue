@@ -21,9 +21,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import { getDailyTasks, submitCheckin } from '../../services/storage'
+import { useTasksStore } from '../../stores/tasks'
 
-const tasks = ref([])
+const tasksStore = useTasksStore()
+
+const tasks = computed(() => tasksStore.dailyTasks)
 
 const todayLabel = computed(() => {
   const d = new Date()
@@ -33,16 +35,15 @@ const todayLabel = computed(() => {
 const doneCount = computed(() => tasks.value.filter((t) => t.status === 'done').length)
 
 function loadTasks() {
-  tasks.value = getDailyTasks()
+  tasksStore.loadDailyTasks()
 }
 
 function onComplete(taskId) {
-  const result = submitCheckin(taskId)
+  const result = tasksStore.submitCheckin(taskId)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
   }
-  loadTasks()
   uni.showToast({ title: result.message, icon: 'success' })
 }
 
