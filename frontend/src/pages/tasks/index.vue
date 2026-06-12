@@ -5,9 +5,12 @@
       <text class="progress-text">今日进度 {{ doneCount }}/{{ tasks.length }}</text>
     </view>
 
-    <view v-if="tasks.length === 0" class="empty">
-      <text>暂无任务，请家长在「任务管理」中添加</text>
-    </view>
+    <empty-state
+      v-if="tasks.length === 0"
+      icon="📋"
+      text="暂无任务"
+      sub-text="请家长在「任务管理」中添加"
+    />
 
     <task-card
       v-for="task in tasks"
@@ -73,12 +76,5 @@ onShow(() => {
 .progress-text {
   font-size: 26rpx;
   color: #ff8c42;
-}
-
-.empty {
-  text-align: center;
-  padding: 80rpx 40rpx;
-  color: #999;
-  font-size: 28rpx;
 }
 </style>

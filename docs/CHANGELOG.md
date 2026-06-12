@@ -4,6 +4,36 @@
 
 ---
 
+## [v1.4.0] — 2026-06-12（待验收）
+
+### P1-3 全局组件
+
+实现 `UpgradeModal` 升级祝贺弹窗和 `EmptyState` 空状态组件，替换 `uni.showModal` 和内联空状态。
+
+### 新增
+- **`src/components/UpgradeModal.vue`** — 升级祝贺弹窗（🎉🌟🎊 动画 + 宠物名称 + 等级 + emoji）
+- **`src/components/EmptyState.vue`** — 空状态组件（icon + text + subText 三行布局）
+
+### 修改
+- **`src/pages.json`** / **`pages.json`** — easycom 注册 `upgrade-modal`、`empty-state`
+- **`src/pages/home/index.vue`** — 升级弹窗从 `uni.showModal` 替换为 `<upgrade-modal>`
+- **`src/pages/tasks/index.vue`** — 空状态从内联 `<view class="empty">` 替换为 `<empty-state>`
+- **`src/pages/parent/confirm/index.vue`** — 空状态从内联 `<view class="empty">` 替换为 `<empty-state>`
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/components/UpgradeModal.vue` | ✅ 新建 |
+| `src/components/EmptyState.vue` | ✅ 新建 |
+| `src/pages.json` | ✅ 注册 easycom |
+| `pages.json` | ✅ 注册 easycom |
+| `src/pages/home/index.vue` | ✅ 替换升级弹窗 |
+| `src/pages/tasks/index.vue` | ✅ 替换空状态 |
+| `src/pages/parent/confirm/index.vue` | ✅ 替换空状态 |
+
+---
+
 ## [v1.3.1] — 2026-06-12
 
 ### P1-2 验收通过

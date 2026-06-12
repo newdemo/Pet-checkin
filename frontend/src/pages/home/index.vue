@@ -74,11 +74,19 @@
         陪玩
       </button>
     </view>
+
+    <upgrade-modal
+      :visible="upgradeVisible"
+      :pet-name="pet.name"
+      :level="upgradeLevel"
+      :emoji="petEmoji"
+      @close="upgradeVisible = false"
+    />
   </view>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { initAppData } from '../../services/storage'
 import { usePetStore } from '../../stores/pet'
@@ -94,6 +102,9 @@ const inventory = computed(() => inventoryStore.inventory)
 const taskStats = computed(() => tasksStore.taskStats)
 const pendingConfirms = computed(() => tasksStore.pendingConfirmsCount)
 const growthProgress = computed(() => petStore.growthProgress)
+
+const upgradeVisible = ref(false)
+const upgradeLevel = ref(1)
 
 const petEmoji = computed(() => {
   const emojis = ['🐣', '🐥', '🐤', '🦊', '🌟']
@@ -126,11 +137,8 @@ function onAction(type) {
   inventoryStore.load()
   const labelMap = { feed: '喂食', wash: '清洁', play: '陪玩' }
   if (result.leveledUp) {
-    uni.showModal({
-      title: '升级啦！',
-      content: `${pet.value.name} 升到 Lv.${pet.value.level} 了！`,
-      showCancel: false
-    })
+    upgradeLevel.value = pet.value.level
+    upgradeVisible.value = true
   } else {
     uni.showToast({ title: `${labelMap[type] || '操作'}成功！`, icon: 'success' })
   }

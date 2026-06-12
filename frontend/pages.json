@@ -4,7 +4,9 @@
     "custom": {
       "^status-bar$": "@/components/StatusBar.vue",
       "^task-card$": "@/components/TaskCard.vue",
-      "^task-form-modal$": "@/components/TaskFormModal.vue"
+      "^task-form-modal$": "@/components/TaskFormModal.vue",
+      "^upgrade-modal$": "@/components/UpgradeModal.vue",
+      "^empty-state$": "@/components/EmptyState.vue"
     }
   },
   "pages": [

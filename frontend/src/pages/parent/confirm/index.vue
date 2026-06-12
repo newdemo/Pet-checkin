@@ -4,9 +4,12 @@
       <text>孩子打卡后需要家长确认，确认通过后才能获得奖励。</text>
     </view>
 
-    <view v-if="tasks.length === 0" class="empty">
-      <text>暂无待确认任务</text>
-    </view>
+    <empty-state
+      v-if="tasks.length === 0"
+      icon="✅"
+      text="暂无待确认任务"
+      sub-text="孩子打卡后会出现在这里"
+    />
 
     <view v-for="task in tasks" :key="task.id" class="task-card">
       <view class="task-main">
@@ -156,13 +159,6 @@ onShow(() => {
 .btn-confirm {
   background: #ff8c42;
   color: #fff;
-}
-
-.empty {
-  text-align: center;
-  padding: 120rpx 40rpx;
-  color: #999;
-  font-size: 28rpx;
 }
 
 .footer {
