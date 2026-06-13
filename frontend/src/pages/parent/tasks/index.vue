@@ -30,6 +30,10 @@
       <button class="btn-settings" @click="goSettings">⚙️ 更多设置</button>
     </view>
 
+    <view class="back-box">
+      <button class="btn-back" @click="goBackToChild">👶 返回孩子模式</button>
+    </view>
+
     <task-form-modal
       :visible="modalVisible"
       :template="editingTemplate"
@@ -44,9 +48,11 @@
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useTasksStore } from '../../../stores/tasks'
+import { useRoleStore } from '../../../stores/role'
 import { ITEM_LABELS } from '../../../constants/pet'
 
 const tasksStore = useTasksStore()
+const roleStore = useRoleStore()
 
 const templates = computed(() => tasksStore.taskTemplates)
 const modalVisible = ref(false)
@@ -126,6 +132,11 @@ function onReset() {
 
 function goSettings() {
   uni.navigateTo({ url: '/pages/parent/settings/index' })
+}
+
+function goBackToChild() {
+  roleStore.switchTo('child')
+  uni.switchTab({ url: '/pages/home/index' })
 }
 
 onShow(() => {
@@ -248,5 +259,24 @@ onShow(() => {
   border-radius: 16rpx;
   border: none;
   text-align: center;
+}
+
+.back-box {
+  margin-top: 24rpx;
+  text-align: center;
+}
+
+.btn-back {
+  display: inline-block;
+  background: #fff;
+  color: #4ECDC4;
+  font-size: 28rpx;
+  padding: 16rpx 40rpx;
+  border: 2rpx solid #4ECDC4;
+  border-radius: 40rpx;
+}
+
+.btn-back::after {
+  border: none;
 }
 </style>

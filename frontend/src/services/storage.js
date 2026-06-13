@@ -50,7 +50,8 @@ export function repairAppData(data) {
     dailyTasks: Array.isArray(data.dailyTasks) ? data.dailyTasks : [],
     streakStat: { ...defaults.streakStat, ...(data.streakStat || {}) },
     dailySummaries: Array.isArray(data.dailySummaries) ? data.dailySummaries : [],
-    history: Array.isArray(data.history) ? data.history : []
+    history: Array.isArray(data.history) ? data.history : [],
+    role: data.role === 'parent' ? 'parent' : 'child'
   }
 }
 
@@ -381,6 +382,27 @@ export function savePetName(name) {
   data.pet.name = name.trim()
   writeStorage(data)
   return { ok: true, message: '宠物名称已更新' }
+}
+
+/**
+ * 切换角色。
+ */
+export function switchRole(role) {
+  if (role !== 'child' && role !== 'parent') {
+    return { ok: false, message: '无效角色' }
+  }
+  const data = getAppData()
+  data.role = role
+  writeStorage(data)
+  return { ok: true, message: role === 'parent' ? '已切换为家长模式' : '已切换为孩子模式' }
+}
+
+/**
+ * 获取当前角色。
+ */
+export function getRole() {
+  const data = getAppData()
+  return data.role || 'child'
 }
 
 /**

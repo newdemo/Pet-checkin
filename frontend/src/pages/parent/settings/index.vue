@@ -33,6 +33,10 @@
     <view class="tip-card">
       <text>设置页面可修改宠物名称等基础信息。更多设置在后续版本中陆续开放。</text>
     </view>
+
+    <view class="back-box">
+      <button class="btn-back" @click="goBackToChild">👶 返回孩子模式</button>
+    </view>
   </view>
 </template>
 
@@ -41,8 +45,10 @@ import { ref } from 'vue'
 import { computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { usePetStore } from '../../../stores/pet'
+import { useRoleStore } from '../../../stores/role'
 
 const petStore = usePetStore()
+const roleStore = useRoleStore()
 const pet = computed(() => petStore.pet)
 const petName = ref('')
 
@@ -63,6 +69,11 @@ function onSave() {
   } else {
     uni.showToast({ title: result.message, icon: 'none' })
   }
+}
+
+function goBackToChild() {
+  roleStore.switchTo('child')
+  uni.switchTab({ url: '/pages/home/index' })
 }
 
 onShow(() => {
@@ -163,5 +174,24 @@ onShow(() => {
   font-size: 24rpx;
   color: #CC6600;
   line-height: 1.6;
+}
+
+.back-box {
+  margin-top: 30rpx;
+  text-align: center;
+}
+
+.btn-back {
+  display: inline-block;
+  background: #fff;
+  color: #4ECDC4;
+  font-size: 28rpx;
+  padding: 16rpx 40rpx;
+  border: 2rpx solid #4ECDC4;
+  border-radius: 40rpx;
+}
+
+.btn-back::after {
+  border: none;
 }
 </style>

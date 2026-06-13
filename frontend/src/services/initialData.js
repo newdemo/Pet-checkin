@@ -64,6 +64,7 @@ export function createInitialData() {
       lastCheckinDate: null
     },
     dailySummaries: [],
-    history: []
+    history: [],
+    role: 'child'
   }
 }

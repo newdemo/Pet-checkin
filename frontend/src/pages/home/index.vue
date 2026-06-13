@@ -92,10 +92,12 @@ import { initAppData } from '../../services/storage'
 import { usePetStore } from '../../stores/pet'
 import { useInventoryStore } from '../../stores/inventory'
 import { useTasksStore } from '../../stores/tasks'
+import { useRoleStore } from '../../stores/role'
 
 const petStore = usePetStore()
 const inventoryStore = useInventoryStore()
 const tasksStore = useTasksStore()
+const roleStore = useRoleStore()
 
 const pet = computed(() => petStore.pet)
 const inventory = computed(() => inventoryStore.inventory)
@@ -145,6 +147,19 @@ function onAction(type) {
 }
 
 function goParentConfirm() {
+  if (roleStore.isChild) {
+    uni.showModal({
+      title: '进入家长模式',
+      content: '家长模式可以管理任务和确认打卡，确定进入吗？',
+      success(res) {
+        if (res.confirm) {
+          roleStore.switchTo('parent')
+          uni.navigateTo({ url: '/pages/parent/confirm/index' })
+        }
+      }
+    })
+    return
+  }
   uni.navigateTo({ url: '/pages/parent/confirm/index' })
 }
 

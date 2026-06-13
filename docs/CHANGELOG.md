@@ -4,6 +4,37 @@
 
 ---
 
+## [v1.5.0] — 2026-06-12（待验收）
+
+### P1-4 角色切换机制
+
+实现孩子/家长角色切换，孩子首次进入家长模式需确认，家长页面可一键返回孩子模式。
+
+### 新增
+- **`src/stores/role.js`** — role store，管理角色状态（child/parent）
+- **`src/services/storage.js`** — `switchRole()` / `getRole()` 持久化函数
+- **`src/services/initialData.js`** — 默认角色 `role: 'child'`
+
+### 修改
+- **`src/pages/home/index.vue`** — 点击「家长管理」弹出确认弹窗，确认后切换为 parent 角色
+- **`src/pages/parent/confirm/index.vue`** — 底部「👶 返回孩子模式」按钮
+- **`src/pages/parent/tasks/index.vue`** — 底部「👶 返回孩子模式」按钮
+- **`src/pages/parent/settings/index.vue`** — 底部「👶 返回孩子模式」按钮
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/stores/role.js` | ✅ 新建 |
+| `src/services/storage.js` | ✅ 新增 switchRole/getRole |
+| `src/services/initialData.js` | ✅ 新增 role 字段 |
+| `src/pages/home/index.vue` | ✅ 角色确认弹窗 |
+| `src/pages/parent/confirm/index.vue` | ✅ 返回孩子模式 |
+| `src/pages/parent/tasks/index.vue` | ✅ 返回孩子模式 |
+| `src/pages/parent/settings/index.vue` | ✅ 返回孩子模式 |
+
+---
+
 ## [v1.4.0] — 2026-06-12
 
 ### P1-3 验收通过

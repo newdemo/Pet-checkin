@@ -28,6 +28,10 @@
     <view class="footer">
       <button class="btn-manage" @click="goTaskManage">管理任务</button>
     </view>
+
+    <view class="back-box">
+      <button class="btn-back" @click="goBackToChild">👶 返回孩子模式</button>
+    </view>
   </view>
 </template>
 
@@ -35,9 +39,11 @@
 import { computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useTasksStore } from '../../../stores/tasks'
+import { useRoleStore } from '../../../stores/role'
 import { ITEM_LABELS } from '../../../constants/pet'
 
 const tasksStore = useTasksStore()
+const roleStore = useRoleStore()
 
 const tasks = computed(() => tasksStore.pendingConfirmations)
 
@@ -70,6 +76,11 @@ function onReview(taskId, approved) {
 
 function goTaskManage() {
   uni.navigateTo({ url: '/pages/parent/tasks/index' })
+}
+
+function goBackToChild() {
+  roleStore.switchTo('child')
+  uni.switchTab({ url: '/pages/home/index' })
 }
 
 onShow(() => {
@@ -176,6 +187,25 @@ onShow(() => {
 }
 
 .btn-manage::after {
+  border: none;
+}
+
+.back-box {
+  margin-top: 48rpx;
+  text-align: center;
+}
+
+.btn-back {
+  display: inline-block;
+  background: #fff;
+  color: #4ECDC4;
+  font-size: 28rpx;
+  padding: 16rpx 40rpx;
+  border: 2rpx solid #4ECDC4;
+  border-radius: 40rpx;
+}
+
+.btn-back::after {
   border: none;
 }
 </style>
