@@ -64,13 +64,13 @@
     </view>
 
     <view class="action-row">
-      <button class="action-btn feed" :disabled="inventory.food < 1" @click="onAction('feed')">
+      <button class="action-btn feed" @click="onAction('feed')">
         喂食
       </button>
-      <button class="action-btn wash" :disabled="inventory.soap < 1" @click="onAction('wash')">
+      <button class="action-btn wash" @click="onAction('wash')">
         清洁
       </button>
-      <button class="action-btn play" :disabled="inventory.toy < 1" @click="onAction('play')">
+      <button class="action-btn play" @click="onAction('play')">
         陪玩
       </button>
     </view>
@@ -131,6 +131,11 @@ function loadData() {
 }
 
 function onAction(type) {
+  const itemMap = { feed: 'food', wash: 'soap', play: 'toy' }
+  if ((inventory.value[itemMap[type]] || 0) < 1) {
+    uni.showToast({ title: '完成任务可获得更多道具', icon: 'none' })
+    return
+  }
   const result = petStore.performAction(type)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
