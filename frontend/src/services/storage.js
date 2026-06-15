@@ -124,12 +124,6 @@ function ensureDailyTasks(data, today) {
   data.taskDate = today
 }
 
-function resetDailyTasks(data, today) {
-  data.taskDate = today
-  data.dailyTasks = []
-  ensureDailyTasks(data, today)
-}
-
 export function getHomeData() {
   const data = getAppData()
   const todayTasks = data.dailyTasks.filter((t) => t.taskDate === data.taskDate)

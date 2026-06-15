@@ -4,6 +4,27 @@
 
 ---
 
+## [v1.7.3] — 2026-06-12
+
+### P2-4 验收通过 — 死代码清理
+
+删除 `src/services/storage.js` 中 `resetDailyTasks` 函数（6 行）。全局搜索确认 0 处调用，安全删除。
+
+### 修改
+
+- **`src/services/storage.js`** — 删除 `resetDailyTasks` 函数（未被调用）
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/services/storage.js` | ✅ 删除死代码 |
+| `docs/TODO.md` | ✅ P2-4 标记已完成，更新版本/完成度/断点 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.7.3 条目 |
+| `docs/开发计划.md` | ✅ 更新版本/阶段/完成度 |
+
+---
+
 ## [v1.7.2] — 2026-06-12
 
 ### P2-3 分析完成 — 首页加载优化（无需代码修改）
