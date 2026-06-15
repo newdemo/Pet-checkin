@@ -81,10 +81,10 @@ onShow(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .page {
   min-height: 100vh;
-  background: #FFF8F0;
+  background: $bg;
   padding: 20rpx 30rpx;
 }
 
@@ -94,7 +94,7 @@ onShow(() => {
 
 .section-title {
   font-size: 28rpx;
-  color: #999;
+  color: $text-secondary;
   margin-bottom: 16rpx;
   display: block;
 }
@@ -131,7 +131,7 @@ onShow(() => {
   width: 100%;
   height: 80rpx;
   line-height: 80rpx;
-  background: #FF8C42;
+  background: $primary;
   color: #fff;
   border-radius: 12rpx;
   font-size: 30rpx;
@@ -184,10 +184,10 @@ onShow(() => {
 .btn-back {
   display: inline-block;
   background: #fff;
-  color: #4ECDC4;
+  color: $success;
   font-size: 28rpx;
   padding: 16rpx 40rpx;
-  border: 2rpx solid #4ECDC4;
+  border: 2rpx solid $success;
   border-radius: 40rpx;
 }
 

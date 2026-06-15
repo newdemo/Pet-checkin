@@ -32,7 +32,7 @@
         <text class="status-icon">🍖</text>
         <text class="status-label">饥饿</text>
         <view class="bar-track">
-          <view class="bar-fill" :style="{ width: hungerPercent + '%', backgroundColor: '#FF8C42' }" />
+          <view class="bar-fill bar-fill-hunger" :style="{ width: hungerPercent + '%' }" />
         </view>
         <text class="status-value">{{ pet.hunger }}</text>
       </view>
@@ -40,7 +40,7 @@
         <text class="status-icon">🧼</text>
         <text class="status-label">清洁</text>
         <view class="bar-track">
-          <view class="bar-fill" :style="{ width: cleanPercent + '%', backgroundColor: '#4ECDC4' }" />
+          <view class="bar-fill bar-fill-clean" :style="{ width: cleanPercent + '%' }" />
         </view>
         <text class="status-value">{{ pet.cleanliness }}</text>
       </view>
@@ -183,7 +183,7 @@ onShow(() => {
 .parent-entry {
   text-align: right;
   font-size: 26rpx;
-  color: #ff8c42;
+  color: $primary;
   margin-bottom: 8rpx;
   display: flex;
   align-items: center;
@@ -240,7 +240,7 @@ onShow(() => {
 .pet-level {
   display: block;
   font-size: 28rpx;
-  color: #ff8c42;
+  color: $primary;
   margin-top: 8rpx;
 }
 
@@ -252,7 +252,7 @@ onShow(() => {
   background: #fff0e6;
   border-radius: 24rpx;
   font-size: 26rpx;
-  color: #ff8c42;
+  color: $primary;
 }
 
 .growth-box {
@@ -262,7 +262,7 @@ onShow(() => {
 
 .growth-label {
   font-size: 24rpx;
-  color: #999;
+  color: $text-secondary;
   margin-bottom: 8rpx;
   display: block;
 }
@@ -279,8 +279,16 @@ onShow(() => {
   border-radius: 10rpx;
 }
 
+.bar-fill-hunger {
+  background-color: $primary;
+}
+
+.bar-fill-clean {
+  background-color: $success;
+}
+
 .growth-fill {
-  background: linear-gradient(90deg, #ff8c42, #ffb347);
+  background: linear-gradient(90deg, $primary, #ffb347);
 }
 
 .status-card,
@@ -323,7 +331,7 @@ onShow(() => {
   width: 56rpx;
   text-align: right;
   font-size: 24rpx;
-  color: #999;
+  color: $text-secondary;
 }
 
 .section-title {
@@ -362,11 +370,11 @@ onShow(() => {
 }
 
 .action-btn.feed {
-  background: #ff8c42;
+  background: $primary;
 }
 
 .action-btn.wash {
-  background: #4ecdc4;
+  background: $success;
 }
 
 .action-btn.play {

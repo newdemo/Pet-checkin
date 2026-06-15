@@ -75,6 +75,6 @@ onShow(() => {
 
 .progress-text {
   font-size: 26rpx;
-  color: #ff8c42;
+  color: $primary;
 }
 </style>

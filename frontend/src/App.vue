@@ -9,7 +9,7 @@ onLaunch(() => {
 
 <style lang="scss">
 page {
-  background-color: #fff8f0;
+  background-color: $bg;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
   color: #333;
 }

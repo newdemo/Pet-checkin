@@ -168,10 +168,10 @@ onShow(() => {
   height: 88rpx;
   line-height: 88rpx;
   background: #fff;
-  color: #ff8c42;
+  color: $primary;
   font-size: 30rpx;
   font-weight: 600;
-  border: 2rpx dashed #ff8c42;
+  border: 2rpx dashed $primary;
   border-radius: 24rpx;
   padding: 0;
 }
@@ -215,7 +215,7 @@ onShow(() => {
 
 .tpl-reward {
   font-size: 24rpx;
-  color: #999;
+  color: $text-secondary;
   margin-top: 6rpx;
 }
 
@@ -227,7 +227,7 @@ onShow(() => {
 
 .btn-edit {
   font-size: 36rpx;
-  color: #999;
+  color: $text-secondary;
   padding: 8rpx;
 }
 
@@ -237,7 +237,7 @@ onShow(() => {
 
 .btn-reset {
   background: #f5f5f5;
-  color: #999;
+  color: $text-secondary;
   font-size: 26rpx;
   border-radius: 40rpx;
   border: none;
@@ -269,10 +269,10 @@ onShow(() => {
 .btn-back {
   display: inline-block;
   background: #fff;
-  color: #4ECDC4;
+  color: $success;
   font-size: 28rpx;
   padding: 16rpx 40rpx;
-  border: 2rpx solid #4ECDC4;
+  border: 2rpx solid $success;
   border-radius: 40rpx;
 }
 

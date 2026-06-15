@@ -71,11 +71,11 @@ const rewardLabel = computed(() => ITEM_LABELS[props.task.rewardType] || props.t
 
 .task-reward {
   font-size: 24rpx;
-  color: #999;
+  color: $text-secondary;
 }
 
 .btn-checkin {
-  background: #ff8c42;
+  background: $primary;
   color: #fff;
   font-size: 28rpx;
   padding: 0 36rpx;
@@ -97,6 +97,6 @@ const rewardLabel = computed(() => ITEM_LABELS[props.task.rewardType] || props.t
 
 .done-text {
   font-size: 26rpx;
-  color: #4ecdc4;
+  color: $success;
 }
 </style>

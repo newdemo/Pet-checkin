@@ -164,7 +164,7 @@ watch(
   align-items: center;
   justify-content: center;
   font-size: 32rpx;
-  color: #999;
+  color: $text-secondary;
   border-radius: 50%;
   background: #f5f5f5;
 }
@@ -222,7 +222,7 @@ watch(
 }
 
 .amount-tag.active {
-  background: #ff8c42;
+  background: $primary;
   color: #fff;
 }
 
@@ -261,7 +261,7 @@ watch(
 }
 
 .btn-confirm {
-  background: #ff8c42;
+  background: $primary;
   color: #fff;
 }
 </style>

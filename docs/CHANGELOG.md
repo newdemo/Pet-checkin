@@ -4,6 +4,48 @@
 
 ---
 
+## [v1.8.0] — 2026-06-12
+
+### P2-5 验收通过 — 颜色变量统一 + Phase 2 完成
+
+将 10 个文件中 43 处硬编码颜色替换为 `uni.scss` 变量引用（`$primary`、`$success`、`$bg`、`$text-secondary`）。Phase 2 体验优化全部完成。
+
+### 修改
+
+| 文件 | 替换数 | 说明 |
+|------|--------|------|
+| `src/App.vue` | 1 | `$bg` |
+| `src/pages/home/index.vue` | 10 | `$primary`(5), `$success`(3), `$text-secondary`(2) + 2 处内联样式→CSS class |
+| `src/pages/tasks/index.vue` | 1 | `$primary` |
+| `src/pages/parent/tasks/index.vue` | 8 | `$primary`(3), `$success`(2), `$text-secondary`(3) |
+| `src/pages/parent/confirm/index.vue` | 6 | `$primary`(2), `$success`(2), `$text-secondary`(2) |
+| `src/pages/parent/settings/index.vue` | 5 | `$primary`(1), `$success`(2), `$bg`(1), `$text-secondary`(1) + 添加 `lang="scss"` |
+| `src/components/TaskFormModal.vue` | 3 | `$primary`(2), `$text-secondary`(1) |
+| `src/components/UpgradeModal.vue` | 2 | `$primary`(2) + 添加 `lang="scss"` |
+| `src/pages/record/index.vue` | 4 | `$primary`(1), `$success`(1), `$text-secondary`(2) |
+| `src/components/TaskCard.vue` | 3 | `$primary`(1), `$success`(1), `$text-secondary`(1) |
+
+### Phase 2 总结
+
+| 任务 | 状态 |
+|------|------|
+| P2-1 Sass @import 迁移 | 已完成 |
+| P2-2 道具不足引导 | 已完成 |
+| P2-3 首页加载优化 | 已完成（问题已不存在） |
+| P2-4 死代码清理 | 已完成 |
+| P2-5 颜色变量统一 | 已完成 |
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `src/` 10 个文件 | ✅ 颜色变量替换（43 处） |
+| `docs/TODO.md` | ✅ P2-5 标记已完成，Phase 2 完成 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.0 条目 |
+| `docs/开发计划.md` | ✅ 更新版本/阶段/完成度 |
+
+---
+
 ## [v1.7.3] — 2026-06-12
 
 ### P2-4 验收通过 — 死代码清理

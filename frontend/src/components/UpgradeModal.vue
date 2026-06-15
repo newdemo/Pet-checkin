@@ -37,7 +37,7 @@ defineProps({
 defineEmits(['close'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .overlay {
   position: fixed;
   top: 0;
@@ -75,7 +75,7 @@ defineEmits(['close'])
   display: block;
   font-size: 40rpx;
   font-weight: 700;
-  color: #FF8C42;
+  color: $primary;
   margin-bottom: 16rpx;
 }
 
@@ -96,7 +96,7 @@ defineEmits(['close'])
   width: 320rpx;
   height: 80rpx;
   line-height: 80rpx;
-  background: linear-gradient(135deg, #FF8C42, #FFB347);
+  background: linear-gradient(135deg, $primary, #FFB347);
   color: #fff;
   border-radius: 40rpx;
   font-size: 30rpx;

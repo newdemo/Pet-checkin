@@ -97,13 +97,13 @@ onShow(() => {
   display: block;
   font-size: 40rpx;
   font-weight: 700;
-  color: #ff8c42;
+  color: $primary;
 }
 
 .stat-label {
   display: block;
   font-size: 22rpx;
-  color: #999;
+  color: $text-secondary;
   margin-top: 8rpx;
 }
 
@@ -135,7 +135,7 @@ onShow(() => {
 .week-label {
   display: block;
   font-size: 22rpx;
-  color: #999;
+  color: $text-secondary;
   margin-bottom: 8rpx;
 }
 
@@ -145,7 +145,7 @@ onShow(() => {
 }
 
 .week-dot.active {
-  color: #4ecdc4;
+  color: $success;
 }
 
 .history-item {

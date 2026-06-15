@@ -138,7 +138,7 @@ onShow(() => {
 
 .task-reward {
   font-size: 24rpx;
-  color: #999;
+  color: $text-secondary;
 }
 
 .task-action {
@@ -164,11 +164,11 @@ onShow(() => {
 
 .btn-reject {
   background: #f5f5f5;
-  color: #999;
+  color: $text-secondary;
 }
 
 .btn-confirm {
-  background: #ff8c42;
+  background: $primary;
   color: #fff;
 }
 
@@ -180,7 +180,7 @@ onShow(() => {
 .btn-manage {
   display: inline-block;
   background: none;
-  color: #ff8c42;
+  color: $primary;
   font-size: 26rpx;
   padding: 0;
   border: none;
@@ -198,10 +198,10 @@ onShow(() => {
 .btn-back {
   display: inline-block;
   background: #fff;
-  color: #4ECDC4;
+  color: $success;
   font-size: 28rpx;
   padding: 16rpx 40rpx;
-  border: 2rpx solid #4ECDC4;
+  border: 2rpx solid $success;
   border-radius: 40rpx;
 }
 
