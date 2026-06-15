@@ -4,6 +4,56 @@
 
 ---
 
+## [v1.6.1] — 2026-06-12
+
+### P1-5 收尾 — 删除执行 + 状态迁移
+
+执行旧版目录删除（20 文件/8 目录），修复 TaskFormModal 导入路径，迁移 TODO.md 状态标记为文字格式，按新规则重算完成度。
+
+### 删除
+
+| 目录 | 文件数 |
+|------|--------|
+| `frontend/pages/` | 4 |
+| `frontend/services/` | 2 |
+| `frontend/components/` | 2 |
+| `frontend/constants/` | 1 |
+| `frontend/utils/` | 1 |
+| `frontend/static/tab/` | 6 |
+| `frontend/mock/` | 1 |
+| `frontend/` 根 | 3（main.js, App.vue, package-lock 2.json） |
+
+### 修复
+
+- **`src/components/TaskFormModal.vue`** — 导入路径 `../../constants/pet` → `../constants/pet`
+
+### 文档
+
+- **`docs/TODO.md`** — 状态标记迁移（⬜/🔄/⚠️/✅ → 待开发/开发中/待验收/已完成），完成度重算（98% → 30.4%）
+- **`docs/开发计划.md`** — 目录结构更新，移除已删除旧目录
+- **`docs/CHANGELOG.md`** — 本文档
+
+### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/pages/` | ✅ 删除（4 文件） |
+| `frontend/services/` | ✅ 删除（2 文件） |
+| `frontend/components/` | ✅ 删除（2 文件） |
+| `frontend/constants/` | ✅ 删除（1 文件） |
+| `frontend/utils/` | ✅ 删除（1 文件） |
+| `frontend/static/tab/` | ✅ 删除（6 文件） |
+| `frontend/mock/` | ✅ 删除（1 文件） |
+| `frontend/main.js` | ✅ 删除 |
+| `frontend/App.vue` | ✅ 删除 |
+| `frontend/package-lock 2.json` | ✅ 删除 |
+| `src/components/TaskFormModal.vue` | ✅ 修复导入路径 |
+| `docs/TODO.md` | ✅ 状态迁移 + 完成度重算 |
+| `docs/开发计划.md` | ✅ 目录结构更新 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.6.1 条目 |
+
+---
+
 ## [v1.6.0] — 2026-06-12
 
 ### P1-5 验收通过 — P1 全部完成

@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { ITEM_LABELS } from '../../constants/pet'
+import { ITEM_LABELS } from '../constants/pet'
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
