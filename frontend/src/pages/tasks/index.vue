@@ -14,7 +14,7 @@
 
     <task-card
       v-for="task in tasks"
-      :key="task.id"
+      :key="`${task.id}-${task.name}-${task.icon}-${task.rewardType}-${task.rewardAmount}`"
       :task="task"
       @task-complete="onComplete"
     />
@@ -53,6 +53,7 @@ function onComplete(taskId) {
 onShow(() => {
   loadTasks()
 })
+
 </script>
 
 <style scoped lang="scss">

@@ -109,7 +109,13 @@ function ensureDailyTasks(data, today) {
 
   data.dailyTasks = enabledTemplates.map((tpl) => {
     const existing = existingMap[tpl.id]
-    if (existing) return existing
+    if (existing) {
+      existing.name = tpl.name
+      existing.icon = tpl.icon
+      existing.rewardType = tpl.rewardType
+      existing.rewardAmount = tpl.rewardAmount
+      return existing
+    }
     return {
       id: `d_${tpl.id}_${today}`,
       templateId: tpl.id,
@@ -143,7 +149,7 @@ export function getHomeData() {
 
 export function getDailyTasks() {
   const data = getAppData()
-  return data.dailyTasks.filter((t) => t.taskDate === data.taskDate)
+  return [...data.dailyTasks.filter((t) => t.taskDate === data.taskDate)]
 }
 
 /**

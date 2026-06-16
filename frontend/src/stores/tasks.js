@@ -51,7 +51,7 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 
   function loadDailyTasks() {
-    dailyTasks.value = getDailyTasks()
+    dailyTasks.value = [...getDailyTasks()]
   }
 
   function loadRecordData() {

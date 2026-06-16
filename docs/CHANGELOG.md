@@ -4,6 +4,40 @@
 
 ---
 
+## [v1.8.2] — 2026-06-12
+
+### P3-4 修复通过 — BUG-01/BUG-02 修复完成
+
+#### BUG-01 修复
+
+- **问题描述：** 任务模板编辑后，`dailyTasks` 未同步更新，导致其他页面展示仍使用旧数据
+- **根因定位：** `frontend/src/pages/tasks/index.vue` 使用 `task.id` 作为 key，Vue 虚拟 DOM 复用相同 key 的 DOM 元素，属性更新后 UI 不刷新
+- **修复方案：** 使用复合 key `:key="\`${task.id}-${task.name}-${task.icon}-${task.rewardType}-${task.rewardAmount}\`"`，强制任务属性变化时重新渲染卡片
+- **修改文件：** `frontend/src/pages/tasks/index.vue:17`
+
+#### BUG-02 修复
+
+- **问题描述：** 编辑任务名称时，中文拼音输入被 `maxlength="10"` 截断/中断
+- **根因定位：** 微信小程序 `<input>` 组件在 IME 组合态下，`maxlength` 计入拼音字母长度，导致输入中断
+- **修复方案：** 移除 `maxlength="10"` 属性，在 `onConfirm` 中添加 trim 后长度校验（>10 提示「任务名称最多 10 个字」）
+- **修改文件：** `frontend/src/components/TaskFormModal.vue:12, 100-104`
+
+#### 涉及文件
+
+| 文件 | 修改操作 |
+|------|----------|
+| `frontend/src/components/TaskFormModal.vue` | 移除 `maxlength="10"` + 添加长度校验 |
+| `frontend/src/pages/tasks/index.vue` | 任务卡片 key 改为复合 key |
+
+#### 验证结果
+
+- ✅ 任务管理页修改任务名称后，今日任务页立即显示新名称
+- ✅ 修改任务图标、奖励类型、奖励数量也能立即同步
+- ✅ 已完成/待确认/未完成状态不丢失
+- ✅ 中文拼音输入超过 10 个字母时不再截断，输入体验正常
+
+---
+
 ## [v1.8.1] — 2026-06-12
 
 ### P3-2 验收通过 — 测试可执行性评估 + 已知 BUG 代码风险定位

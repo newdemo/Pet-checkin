@@ -9,7 +9,7 @@
       <view class="modal-body">
         <view class="form-item">
           <text class="label">任务名称</text>
-          <input class="input" v-model="form.name" placeholder="例如：刷牙" maxlength="10" />
+          <input class="input" v-model="form.name" placeholder="例如：刷牙" />
         </view>
 
         <view class="form-item">
@@ -96,6 +96,10 @@ function resetForm() {
 function onConfirm() {
   if (!form.value.name.trim()) {
     uni.showToast({ title: '请输入任务名称', icon: 'none' })
+    return
+  }
+  if (form.value.name.trim().length > 10) {
+    uni.showToast({ title: '任务名称最多 10 个字', icon: 'none' })
     return
   }
   if (!form.value.icon.trim()) {
