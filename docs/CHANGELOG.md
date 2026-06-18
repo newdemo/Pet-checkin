@@ -4,6 +4,29 @@
 
 ---
 
+## [v1.8.3] — 2026-06-18
+
+### P4-1 验收通过 — 微信云开发环境开通
+
+#### 任务完成
+
+- **微信小程序 AppID 配置** — 更新 `frontend/src/manifest.json` 中的微信小程序 AppID 为正式环境 ID：`wx8526f4dd470305c3`
+- **微信云开发环境配置** — 创建统一配置文件 `frontend/src/constants/config.js`，集中管理环境变量
+- **云环境 ID 配置** — 在统一配置文件中记录微信云开发环境 ID：`cloudbase-d9gxw1osg187d6e51`
+- **项目状态更新** — 更新 TODO.md 中的项目阶段状态和 P4-1 任务状态为「已完成」
+
+#### 修改文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/src/manifest.json` | ✅ 更新微信小程序 AppID 为 `wx8526f4dd470305c3` |
+| `frontend/src/constants/config.js` | ✅ 新增统一配置文件，包含 AppID 和云环境 ID |
+| `docs/TODO.md` | ✅ 项目阶段更新为「P4 云端 MVP 上线验证」，P4-1 状态标记为「已完成」 |
+| `docs/开发计划.md` | ✅ M4 云开发接入状态更新为「✅ 环境已开通，待接入」 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.3 条目 |
+
+---
+
 ## [v1.8.2] — 2026-06-16
 
 ### P3-5 完成 — AI 测试能力复盘
