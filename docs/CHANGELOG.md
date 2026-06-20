@@ -4,6 +4,117 @@
 
 ---
 
+## [v1.8.7] — 2026-06-21
+
+### UX-2B 已完成 — 小梨生命感增强
+
+#### 新增
+
+- **小梨多状态素材** — 在 `frontend/src/static/ux/xiaoli/` 增加 `xiaoli_happy_wave.png`、`xiaoli_hungry.png`、`xiaoli_thinking.png`、`xiaoli_waiting_gift.png`，用于首页根据状态切换角色图。
+- **状态图自动切换** — 首页新增 `petImageSrc` 计算属性，根据 `emotionState` 返回对应小梨素材路径。
+- **互动期待状态** — 首页新增 `rewardReady` 派生状态，仅基于现有背包道具数量和宠物状态判断，不新增数据库字段或 store 字段；用户可见表达为“期待照顾/互动”，不表达为礼物。
+- **生命感动画** — 为首页小梨新增轻微上下浮动、呼吸动画和脚下柔和阴影呼吸效果。
+
+#### 修改
+
+- **首页状态文案** — 优化气泡文案：开心、饥饿、想清洁、想玩耍、期待互动均有更短、更像宠物陪伴的表达；`rewardReady` 气泡显示为“小梨想和你互动～”。
+- **首页情绪 Chip** — 为 `rewardReady` 补充顶部状态 Chip 文案和图标，显示为“✨ 等你照顾”，避免状态切换后出现空展示。
+- **首页小梨图片引用** — 将小梨主图从固定 `xiaoli_happy_standing.png` 改为 `:src="petImageSrc"` 动态引用。
+
+#### 状态映射
+
+| 状态 | 素材 |
+|------|------|
+| `happy` | `xiaoli_happy_wave.png` |
+| `hungry` | `xiaoli_hungry.png` |
+| `bored` | `xiaoli_thinking.png` |
+| `needClean` | `xiaoli_thinking.png` |
+| `rewardReady` | `xiaoli_waiting_gift.png` |
+| 默认兜底 | `xiaoli_happy_standing.png` |
+
+#### 验证
+
+- `npm run build:mp-weixin` 构建通过。
+- 构建产物 `frontend/dist/build/mp-weixin` 约 8.8M，其中 `static/ux` 约 8.5M，`static/ux/xiaoli` 约 4.5M。
+- 构建输出仅包含既有 Sass legacy JS API deprecation warning，无新增编译错误。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/src/static/ux/xiaoli/xiaoli_happy_wave.png` | ✅ 新增首页开心挥手状态素材 |
+| `frontend/src/static/ux/xiaoli/xiaoli_hungry.png` | ✅ 新增首页饥饿状态素材 |
+| `frontend/src/static/ux/xiaoli/xiaoli_thinking.png` | ✅ 新增首页思考/想清洁/想玩耍状态素材 |
+| `frontend/src/static/ux/xiaoli/xiaoli_waiting_gift.png` | ✅ 新增首页互动期待状态素材，来源为交付素材 `xiaoli_expect_gift.png`；仅保留素材文件名，不在用户文案中表达为礼物 |
+| `frontend/src/pages/home/index.vue` | ✅ 状态图切换、气泡文案和轻量动画增强 |
+| `docs/TODO.md` | ✅ 更新 UX-2B 待验收断点 |
+| `docs/开发计划.md` | ✅ 更新 UX 专项状态和当前基线 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.7 条目 |
+
+#### 边界确认
+
+- 未修改宠物页
+- 未修改 TabBar
+- 未修改任务页、成长页、家长页
+- 未修改 `frontend/src/stores/*`
+- 未修改 `frontend/src/services/*`
+- 未修改数据库、云函数、Mock 数据结构
+- 未新增数据库字段或 store 字段
+- 未修改首页整体布局结构和信息架构
+- 已通过 Git 提交纳入版本记录
+
+---
+
+## [v1.8.6] — 2026-06-21
+
+### UX-2A 已完成 — 首页正式素材接入第一步
+
+#### 新增
+
+- **首页 UX 素材目录** — 新增 `frontend/src/static/ux/` 下的 `background/`、`xiaoli/`、`icons/` 子目录，仅复制本次首页 UX-1A 需要的 5 张原图素材，未压缩、未覆盖源文件。
+- **首页房间背景图** — 接入 `bg_warm_room_home.png`，用于替换首页舞台原 CSS 渐变/几何房间背景。
+- **小梨主视觉图** — 接入 `xiaoli_happy_standing.png`，用于替换首页 emoji/CSS 小梨占位。
+- **照顾按钮图标** — 接入 `icon_food.png`、`icon_clean.png`、`icon_play.png`，用于替换喂食、清洁、陪玩按钮内 emoji。
+
+#### 修改
+
+- **首页素材引用** — `frontend/src/pages/home/index.vue` 使用 `/static/ux/...` 路径引用图片，兼容 UniApp 微信小程序构建。
+- **首页主舞台** — 保留 `home-stage` 点击进入宠物页的 `goPetHome()` 入口，仅替换视觉层素材。
+- **照顾动作按钮** — 保留 `onAction(action.type)`、推荐态和道具数量展示，仅将按钮图标从文本 emoji 切换为 `image` 组件。
+
+#### 验证
+
+- `npm run build:mp-weixin` 构建通过。
+- 构建产物 `frontend/dist/build/mp-weixin` 约 5.7M，其中 `static/ux` 约 5.4M。
+- 构建输出仅包含既有 Sass legacy JS API deprecation warning，无新增编译错误。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/src/static/ux/background/bg_warm_room_home.png` | ✅ 新增首页背景素材 |
+| `frontend/src/static/ux/xiaoli/xiaoli_happy_standing.png` | ✅ 新增首页小梨素材 |
+| `frontend/src/static/ux/icons/icon_food.png` | ✅ 新增喂食按钮图标 |
+| `frontend/src/static/ux/icons/icon_clean.png` | ✅ 新增清洁按钮图标 |
+| `frontend/src/static/ux/icons/icon_play.png` | ✅ 新增陪玩按钮图标 |
+| `frontend/src/pages/home/index.vue` | ✅ 替换首页背景、小梨占位、三个照顾按钮 emoji |
+| `docs/TODO.md` | ✅ 更新 UX-2A 待验收断点 |
+| `docs/开发计划.md` | ✅ 更新 UX 专项状态、静态资源目录说明与当前基线 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.6 条目 |
+
+#### 边界确认
+
+- 未修改 TabBar
+- 未修改宠物页
+- 未修改任务页/成长页/家长页
+- 未修改 `frontend/src/stores/*`
+- 未修改 `frontend/src/services/*`
+- 未修改数据库、云函数、Mock 数据结构
+- 未接入宠物页素材、家具素材或全部素材
+- 未压缩、覆盖或改写源素材文件
+
+---
+
 ## [v1.8.5] — 2026-06-21
 
 ### UX-1B 待验收 — 宠物页高保真重构

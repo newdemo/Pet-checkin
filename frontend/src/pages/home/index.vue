@@ -37,26 +37,7 @@
     </view>
 
     <view class="home-stage" @click="goPetHome">
-      <view class="stage-sunlight" />
-      <view class="stage-window">
-        <view class="window-glow" />
-      </view>
-      <view class="stage-shelf">
-        <view class="shelf-board" />
-        <view class="shelf-plant" />
-        <view class="shelf-frame">🐥</view>
-      </view>
-      <view class="unlock-ghost unlock-left">
-        <text>🔒</text>
-      </view>
-      <view class="unlock-ghost unlock-right">
-        <text>🔒</text>
-      </view>
-      <view class="pet-bed">
-        <text>☁️</text>
-      </view>
-      <view class="star-lamp">⭐</view>
-      <view class="play-ball">🏐</view>
+      <image class="stage-bg" src="/static/ux/background/bg_warm_room_home.png" mode="aspectFill" />
 
       <view class="emotion-bubble">
         <text>{{ emotionText }}</text>
@@ -64,10 +45,8 @@
 
       <view class="pet-visual" :class="`pet-visual-${emotionState}`">
         <view class="pet-aura" />
-        <view class="pet-body">
-          <text class="pet-emoji">{{ petEmoji }}</text>
-          <view class="pet-shadow" />
-        </view>
+        <image class="pet-image" :src="petImageSrc" mode="aspectFit" />
+        <view class="pet-shadow" />
       </view>
     </view>
 
@@ -91,7 +70,7 @@
         :class="[`care-action-${action.type}`, { 'is-recommended': recommendedAction === action.type }]"
         @click="onAction(action.type)"
       >
-        <text class="action-icon">{{ action.icon }}</text>
+        <image class="action-icon" :src="action.icon" mode="aspectFit" />
         <view class="action-texts">
           <text class="action-title">{{ action.title }}</text>
           <text class="action-subtitle">{{ action.subtitle }}</text>
@@ -172,21 +151,40 @@ const petEmoji = computed(() => {
   return emojis[Math.min(Math.max(level, 1) - 1, emojis.length - 1)]
 })
 
+const rewardReady = computed(() => {
+  const hasItem = (inventory.value.food || 0) > 0 || (inventory.value.soap || 0) > 0 || (inventory.value.toy || 0) > 0
+  const hasCareNeed = (pet.value.cleanliness || 0) <= 35 || (pet.value.hunger || 0) <= 35 || (pet.value.mood || 0) <= 35
+  return hasItem && !hasCareNeed
+})
+
 const emotionState = computed(() => {
   if ((pet.value.cleanliness || 0) <= 35) return 'needClean'
   if ((pet.value.hunger || 0) <= 35) return 'hungry'
   if ((pet.value.mood || 0) <= 35) return 'bored'
+  if (rewardReady.value) return 'rewardReady'
   return 'happy'
+})
+
+const petImageSrc = computed(() => {
+  const imageMap = {
+    happy: '/static/ux/xiaoli/xiaoli_happy_wave.png',
+    hungry: '/static/ux/xiaoli/xiaoli_hungry.png',
+    bored: '/static/ux/xiaoli/xiaoli_thinking.png',
+    needClean: '/static/ux/xiaoli/xiaoli_thinking.png',
+    rewardReady: '/static/ux/xiaoli/xiaoli_waiting_gift.png'
+  }
+  return imageMap[emotionState.value] || '/static/ux/xiaoli/xiaoli_happy_standing.png'
 })
 
 const emotionText = computed(() => {
   const textMap = {
-    happy: '小梨想和你一起布置新家',
-    hungry: '小梨肚子有点空，可以喂点东西吗？',
-    needClean: '小梨想洗香香，保持干净会更开心',
-    bored: '小梨想和你玩一会儿'
+    happy: '小梨今天心情超好～',
+    hungry: '肚子有点饿啦～',
+    needClean: '想洗香香～',
+    bored: '来陪我玩会儿吧～',
+    rewardReady: '小梨想和你互动～'
   }
-  return textMap[emotionState.value]
+  return textMap[emotionState.value] || '小梨在等你一起玩～'
 })
 
 const moodChipText = computed(() => {
@@ -194,9 +192,10 @@ const moodChipText = computed(() => {
     happy: '心情很好',
     hungry: '有点饿',
     needClean: '想洗澡',
-    bored: '想玩耍'
+    bored: '想玩耍',
+    rewardReady: '等你照顾'
   }
-  return textMap[emotionState.value]
+  return textMap[emotionState.value] || '心情很好'
 })
 
 const moodChipIcon = computed(() => {
@@ -204,9 +203,10 @@ const moodChipIcon = computed(() => {
     happy: '😊',
     hungry: '🍖',
     needClean: '🫧',
-    bored: '🎾'
+    bored: '🎾',
+    rewardReady: '✨'
   }
-  return iconMap[emotionState.value]
+  return iconMap[emotionState.value] || '😊'
 })
 
 const recommendedAction = computed(() => {
@@ -214,9 +214,10 @@ const recommendedAction = computed(() => {
     hungry: 'feed',
     needClean: 'wash',
     bored: 'play',
+    rewardReady: '',
     happy: ''
   }
-  return actionMap[emotionState.value]
+  return actionMap[emotionState.value] || ''
 })
 
 const stageText = computed(() => {
@@ -229,19 +230,19 @@ const stageText = computed(() => {
 const careActions = computed(() => [
   {
     type: 'feed',
-    icon: '🍖',
+    icon: '/static/ux/icons/icon_food.png',
     title: '喂食',
     subtitle: `食物 ×${inventory.value.food || 0}`
   },
   {
     type: 'wash',
-    icon: '🫧',
+    icon: '/static/ux/icons/icon_clean.png',
     title: '清洁',
     subtitle: `肥皂 ×${inventory.value.soap || 0}`
   },
   {
     type: 'play',
-    icon: '🏐',
+    icon: '/static/ux/icons/icon_play.png',
     title: '陪玩',
     subtitle: `玩具 ×${inventory.value.toy || 0}`
   }
@@ -464,11 +465,19 @@ onShow(() => {
   margin-bottom: 20rpx;
   overflow: hidden;
   border-radius: 48rpx;
-  background:
-    linear-gradient(110deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 240, 215, 0.34) 54%, rgba(255, 220, 166, 0.48) 100%),
-    radial-gradient(circle at 50% 88%, #f6d9af 0, #f6d9af 130rpx, rgba(246, 217, 175, 0) 132rpx),
-    linear-gradient(180deg, #fff2dc 0%, #ffe8cf 65%, #f7d1a8 100%);
+  background: #fff2dc;
   box-shadow: 0 20rpx 46rpx rgba(145, 87, 39, 0.15);
+}
+
+.stage-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .stage-sunlight {
@@ -628,10 +637,11 @@ onShow(() => {
   position: absolute;
   z-index: 3;
   left: 50%;
-  bottom: 116rpx;
-  width: 330rpx;
-  height: 390rpx;
+  bottom: 96rpx;
+  width: 360rpx;
+  height: 430rpx;
   transform: translateX(-50%);
+  animation: petFloat 4.8s ease-in-out infinite;
 }
 
 .pet-aura {
@@ -643,45 +653,31 @@ onShow(() => {
   border-radius: 50%;
   transform: translateX(-50%);
   background: radial-gradient(circle, rgba(255, 229, 120, 0.42), rgba(255, 209, 102, 0.08) 58%, rgba(255, 209, 102, 0) 72%);
+  animation: petBreath 3.8s ease-in-out infinite;
 }
 
-.pet-body {
+.pet-image {
   position: absolute;
   left: 50%;
-  bottom: 10rpx;
-  width: 270rpx;
-  height: 320rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 52% 52% 46% 46%;
+  bottom: 0;
+  width: 360rpx;
+  height: 430rpx;
   transform: translateX(-50%);
-  background: linear-gradient(150deg, #ffe884 0%, #ffd454 44%, #ffc044 100%);
-  box-shadow: inset -18rpx -22rpx 32rpx rgba(210, 132, 31, 0.12), inset 16rpx 20rpx 26rpx rgba(255, 255, 255, 0.24), 0 24rpx 40rpx rgba(178, 114, 40, 0.18);
-}
-
-.pet-emoji {
-  position: relative;
-  z-index: 2;
-  font-size: 138rpx;
-  line-height: 1;
-  filter: drop-shadow(0 8rpx 10rpx rgba(146, 84, 25, 0.12));
+  filter: drop-shadow(0 18rpx 18rpx rgba(146, 84, 25, 0.12));
+  animation: petImageBreath 3.8s ease-in-out infinite;
 }
 
 .pet-shadow {
   position: absolute;
   left: 50%;
   bottom: -28rpx;
-  width: 236rpx;
-  height: 42rpx;
+  width: 250rpx;
+  height: 44rpx;
   border-radius: 50%;
   transform: translateX(-50%);
-  background: rgba(137, 90, 42, 0.12);
+  background: radial-gradient(ellipse, rgba(117, 76, 38, 0.16) 0%, rgba(117, 76, 38, 0.08) 54%, rgba(117, 76, 38, 0) 72%);
   filter: blur(2rpx);
-}
-
-.pet-visual-hungry .pet-body {
-  background: linear-gradient(150deg, #ffe7a6 0%, #ffd164 52%, #ffb74d 100%);
+  animation: petShadowBreath 4.8s ease-in-out infinite;
 }
 
 .pet-visual-needClean .pet-aura {
@@ -792,8 +788,9 @@ onShow(() => {
 }
 
 .action-icon {
-  font-size: 42rpx;
-  line-height: 1;
+  flex: 0 0 auto;
+  width: 54rpx;
+  height: 54rpx;
 }
 
 .action-texts {
@@ -972,5 +969,49 @@ onShow(() => {
   color: #9a8f86;
   font-size: 26rpx;
   text-align: center;
+}
+
+@keyframes petFloat {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10rpx);
+  }
+}
+
+@keyframes petBreath {
+  0%,
+  100% {
+    opacity: 0.92;
+    transform: translateX(-50%) scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+
+@keyframes petImageBreath {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.018);
+  }
+}
+
+@keyframes petShadowBreath {
+  0%,
+  100% {
+    opacity: 0.74;
+    transform: translateX(-50%) scaleX(0.96);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(-50%) scaleX(1.08);
+  }
 }
 </style>
