@@ -4,6 +4,85 @@
 
 ---
 
+## [v1.8.5] — 2026-06-21
+
+### UX-1B 待验收 — 宠物页高保真重构
+
+#### 新增
+
+- **小梨的家宠物页** — 新增普通页面 `frontend/src/pages/pet/index.vue`，用于承载宠物状态中心、家园展示中心、家具展示中心和照顾互动中心。
+- **顶部状态 Chip** — 展示饱腹、清洁、心情、成长值，并复用现有 `pet.hunger`、`pet.cleanliness`、`pet.mood`、`petStore.growthProgress` 数据。
+- **家园主舞台** — 使用 CSS 渐变、几何图形和 emoji 临时素材实现小窝、星星灯、玩具角、待解锁区域和小梨主视觉。
+- **家园布置静态模块** — 在页面内部使用静态配置展示小窝、星星灯、玩具角、待解锁，不接入真实家具/收藏/金币系统。
+- **小梨悄悄话** — 根据现有宠物状态派生照顾提示，并展示今日任务进度提示。
+
+#### 修改
+
+- **普通页面注册** — 在 `frontend/src/pages.json` 的 `pages` 数组新增 `pages/pet/index`，未修改 `tabBar.list`。
+- **首页入口** — 在 `frontend/src/pages/home/index.vue` 仅为现有宠物舞台增加点击进入宠物页的导航入口，未重构首页视觉和布局。
+- **照顾动作复用** — 宠物页喂食、清洁、陪玩继续调用 `petStore.performAction(type)`，保留道具不足提示“完成任务可获得更多道具”和 `upgrade-modal` 升级弹窗。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/src/pages/pet/index.vue` | ✅ 新增宠物页主实现 |
+| `frontend/src/pages.json` | ✅ 仅在 pages 数组新增普通页面注册 |
+| `frontend/src/pages/home/index.vue` | ✅ 仅增加进入宠物页导航入口 |
+| `docs/TODO.md` | ✅ 更新当前断点与 UX-1B 已完成状态 |
+| `docs/开发计划.md` | ✅ 更新页面数量、阶段与版本状态 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.5 条目 |
+
+#### 边界确认
+
+- 未修改 `tabBar.list`
+- 未修改 `frontend/src/stores/*`
+- 未修改 `frontend/src/services/*`
+- 未修改任务页、成长页、家长页
+- 未修改数据库、云函数、Mock 数据结构
+- 未新增真实家具系统、收藏系统、金币系统
+- 未引入外部图片素材
+
+---
+
+## [v1.8.4] — 2026-06-20
+
+### P4-2A 待验收 — 最小数据库集合设计（含预留字段）
+
+#### 修订
+
+- **执行版 Spec** — 新增 `docs/specs/P4-2A_database-design-cleanup.md`，记录本次数据库设计清理的执行范围和验收标准。
+- **P4 执行版唯一数据库设计文档** — 新增 `docs/P4-2A_最小数据库集合设计.md`，作为 P4-2B 创建集合的唯一依据。
+- **历史内容降级** — 将 `family`、`streak_stat`、`daily_summary`、`inventory_log`、`task_template`、`daily_task`、`checkin`、`waiting` / `done`、snake_case 和 `getFamilyIds()` 明确标记为历史参考。
+- **执行边界收敛** — P4-2B 仅允许创建 `pet`、`inventory`、`taskTemplates`、`dailyTasks`、`checkinRecords`；P4-3 仅保留 `login`、`getHomeData`、`submitCheckin`、`reviewCheckin`。
+
+#### 新增
+
+- **最小数据库集合设计** — 输出 `pet`、`inventory`、`taskTemplates`、`dailyTasks`、`checkinRecords` 五个集合设计。
+- **索引设计** — 明确 `pet`、`inventory`、`dailyTasks`、`checkinRecords` 的核心索引，并补充去重与待确认查询建议索引。
+- **初始化数据设计** — 明确后续 login 云函数需要初始化的 familyId、childId、宠物、背包、任务模板和当日任务生成规则。
+- **状态流转设计** — 明确 `dailyTasks.status`、`checkinRecords.status`、`rewardGranted` 默认值和防重复发奖策略。
+- **权限建议** — 输出 P4 阶段前端读写限制和必须通过云函数的操作建议。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `docs/数据库设计.md` | ✅ 追加 P4-2A 数据库设计文档 |
+| `docs/TODO.md` | ✅ 更新当前任务为 P4-2A，状态为待验收 |
+| `docs/开发计划.md` | ✅ 更新 4.2 为 P4-2A 设计待验收 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.4 条目 |
+
+#### 边界确认
+
+- 未创建云数据库集合
+- 未开发云函数
+- 未修改业务逻辑代码
+- 未进入 P4-3
+- 未提交 Git
+
+---
+
 ## [v1.8.3] — 2026-06-18
 
 ### P4-1 验收通过 — 微信云开发环境开通

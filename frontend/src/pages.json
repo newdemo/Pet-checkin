@@ -19,6 +19,14 @@
       }
     },
     {
+      "path": "pages/pet/index",
+      "style": {
+        "navigationBarTitleText": "小梨的家",
+        "navigationBarBackgroundColor": "#FF8C42",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/tasks/index",
       "style": {
         "navigationBarTitleText": "今日任务",
