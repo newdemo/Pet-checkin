@@ -4,6 +4,68 @@
 
 ---
 
+## [v1.8.8] — 2026-06-21
+
+### UX-2D 待验收 — 小程序真机预览包体优化
+
+#### 新增
+
+- **原始素材备份目录** — 新增 `frontend/originals/ux/`，备份 UX PNG 原始交付素材；该目录位于 `frontend/src` 之外，不参与微信小程序静态资源构建。
+
+#### 修改
+
+- **首页背景 PNG 重采样** — 将 `frontend/src/static/ux/background/bg_warm_room_home.png` 从 1046×1504 保守重采样到 800×1150，保持 PNG 格式。
+- **小梨状态 PNG 重采样** — 将 `frontend/src/static/ux/xiaoli/` 下 5 张小梨状态图从 1254×1254 保守重采样到 720×720，保持 PNG 格式。
+- **照顾按钮 icon PNG 重采样** — 将 `frontend/src/static/ux/icons/` 下 3 张按钮图标从 1254×1254 保守重采样到 256×256，保持 PNG 格式。
+- **包体优化** — `frontend/src/static/ux` 从约 8.46M 降至约 2.63M，`frontend/dist/build/mp-weixin` 从约 8.60M 降至约 2.78M。
+
+#### 验证
+
+- `npm run build:mp-weixin` 构建通过。
+- 构建产物 `frontend/dist/build/mp-weixin` 约 2.78M。
+- 构建产物 `frontend/dist/build/mp-weixin/static/ux` 约 2.63M。
+- 构建输出仅包含既有 Sass legacy JS API deprecation warning，无新增编译错误。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/originals/ux/background/bg_warm_room_home.png` | ✅ 备份原始背景 PNG |
+| `frontend/originals/ux/icons/icon_clean.png` | ✅ 备份原始清洁 icon PNG |
+| `frontend/originals/ux/icons/icon_food.png` | ✅ 备份原始喂食 icon PNG |
+| `frontend/originals/ux/icons/icon_play.png` | ✅ 备份原始陪玩 icon PNG |
+| `frontend/originals/ux/xiaoli/xiaoli_happy_standing.png` | ✅ 备份原始小梨状态 PNG |
+| `frontend/originals/ux/xiaoli/xiaoli_happy_wave.png` | ✅ 备份原始小梨状态 PNG |
+| `frontend/originals/ux/xiaoli/xiaoli_hungry.png` | ✅ 备份原始小梨状态 PNG |
+| `frontend/originals/ux/xiaoli/xiaoli_thinking.png` | ✅ 备份原始小梨状态 PNG |
+| `frontend/originals/ux/xiaoli/xiaoli_waiting_gift.png` | ✅ 备份原始小梨状态 PNG |
+| `frontend/src/static/ux/background/bg_warm_room_home.png` | ✅ 保守重采样压缩运行背景 PNG |
+| `frontend/src/static/ux/icons/icon_clean.png` | ✅ 保守重采样压缩运行 icon PNG |
+| `frontend/src/static/ux/icons/icon_food.png` | ✅ 保守重采样压缩运行 icon PNG |
+| `frontend/src/static/ux/icons/icon_play.png` | ✅ 保守重采样压缩运行 icon PNG |
+| `frontend/src/static/ux/xiaoli/xiaoli_happy_standing.png` | ✅ 保守重采样压缩运行小梨 PNG |
+| `frontend/src/static/ux/xiaoli/xiaoli_happy_wave.png` | ✅ 保守重采样压缩运行小梨 PNG |
+| `frontend/src/static/ux/xiaoli/xiaoli_hungry.png` | ✅ 保守重采样压缩运行小梨 PNG |
+| `frontend/src/static/ux/xiaoli/xiaoli_thinking.png` | ✅ 保守重采样压缩运行小梨 PNG |
+| `frontend/src/static/ux/xiaoli/xiaoli_waiting_gift.png` | ✅ 保守重采样压缩运行小梨 PNG |
+| `docs/TODO.md` | ✅ 更新 UX-2D 待验收断点 |
+| `docs/开发计划.md` | ✅ 更新 UX-2D 包体优化状态与构建基线 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.8 条目 |
+
+#### 边界确认
+
+- 未修改业务逻辑
+- 未修改首页代码引用
+- 未修改 TabBar
+- 未修改 `frontend/src/stores/*`
+- 未修改 `frontend/src/services/*`
+- 未修改数据库、云函数、Mock 数据结构
+- 未使用 WebP、CDN 或分包
+- 未删除原始素材
+- 真机预览验收通过，准备提交 Git Commit
+
+---
+
 ## [v1.8.7] — 2026-06-21
 
 ### UX-2B 已完成 — 小梨生命感增强
