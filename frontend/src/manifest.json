@@ -12,7 +12,8 @@
       "es6": true,
       "minified": true
     },
-    "usingComponents": true
+    "usingComponents": true,
+    "cloudfunctionRoot": "cloudfunctions/"
   },
   "vueVersion": "3"
 }

@@ -4,6 +4,87 @@
 
 ---
 
+## [v1.9.0] — 2026-06-23
+
+### P4-3B 验收通过 — getHomeData 云函数开发完成
+
+#### 新增
+
+- **getHomeData 云函数** — `frontend/cloudfunctions/getHomeData/`，聚合返回 pet、inventory、dailyTasks、checkinRecords 数据。
+- **dailyTasks 懒生成逻辑** — 当今日 dailyTasks 为空时，自动从 taskTemplates（enabled=true，sortOrder asc）生成当日任务。
+- **frontend/project.config.json** — 新增 `"cloudfunctionRoot": "cloudfunctions/"`，支持微信开发者工具独立窗口右键上传部署云函数。
+
+#### 清理
+
+- 删除 `scripts/watch-cloudfunctions.js`、`scripts/sync-cloudfunctions.js`
+- `package.json` 移除 `watch:cloudfunctions`、`sync:cloudfunctions`、`copy:cloudfunctions`、`build:mp-weixin:cloud`
+- `build:mp-weixin` 恢复为普通 `uni build -p mp-weixin`
+- 删除 `dist/dev/mp-weixin/cloudfunctions/`、`dist/build/mp-weixin/cloudfunctions/`
+- 删除首页临时「验证getHomeData」按钮及对应方法和样式
+
+#### 云函数部署流程确立
+
+- HBuilderX 窗口 → 页面预览（dist/dev/mp-weixin）
+- 微信开发者工具独立窗口 → 打开 frontend/ → 右键上传部署云函数
+- 云函数不属于 uni-app 编译产物，不需要也不应该放在 dist 目录
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/cloudfunctions/getHomeData/index.js` | ✅ 新增（含懒生成逻辑） |
+| `frontend/cloudfunctions/getHomeData/package.json` | ✅ 新增 |
+| `frontend/project.config.json` | ✅ 新增 cloudfunctionRoot |
+| `frontend/package.json` | ✅ 清理云函数同步相关脚本 |
+| `frontend/scripts/watch-cloudfunctions.js` | ❌ 删除 |
+| `frontend/scripts/sync-cloudfunctions.js` | ❌ 删除 |
+| `frontend/src/pages/home/index.vue` | ✅ 删除临时验证按钮 |
+| `docs/TODO.md` | ✅ 更新版本 v1.9.0、P4-3B 验收通过、完成度 79.1% |
+| `docs/开发计划.md` | ✅ 更新阶段状态 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.9.0 条目 |
+
+#### 边界确认
+
+- 未切换 DATA_SOURCE（保持 mock）
+- 未修改现有业务流程
+- 未提交 Git Commit
+
+---
+
+## [v1.8.9] — 2026-06-22
+
+### P4-3A 验收通过 — login 云函数验证增强
+
+#### 新增
+
+- **wx.cloud.init 初始化** — 在 `App.vue` `onLaunch` 中新增 `wx.cloud.init({ env: CLOUD_ENV_ID, traceUser: true })`，try/catch 包裹，非小程序环境静默忽略，为后续云函数调用提供前置条件。
+- **login 云函数临时验证入口** — 在首页 header 新增临时「🔧 验证login」按钮，调用 `wx.cloud.callFunction({ name: 'login' })` 并在控制台和弹窗展示返回结果。验证完成后已删除。
+
+#### 验证
+
+- 云开发控制台云端测试：调用成功，返回 `{"ok":false,"message":"无法获取 OPENID"}`，符合预期（云端测试无用户登录态）。
+- 真机调用验证通过：首次调用返回 `isNewUser:true`，数据库自动创建 5 个集合并写入初始数据（pet 1条、inventory 1条、taskTemplates 5条、dailyTasks 5条、checkinRecords 0条）。
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/src/App.vue` | ✅ 新增 wx.cloud.init 初始化 |
+| `frontend/src/pages/home/index.vue` | ✅ 新增临时验证按钮（已删除） |
+| `docs/TODO.md` | ✅ 更新版本 v1.8.9、P4-3A 验收通过、完成度 72.8% |
+| `docs/开发计划.md` | ✅ 更新阶段为 P4 Cloud & Launch、P4-3 状态为开发中 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.8.9 条目 |
+
+#### 边界确认
+
+- 未切换 DATA_SOURCE（保持 mock）
+- 未修改现有业务流程
+- 未修改 store、service、数据库设计
+- 未提交 Git Commit
+- 临时验证入口已删除，wx.cloud.init 保留
+
+---
+
 ## [v1.8.8] — 2026-06-21
 
 ### UX-2D 待验收 — 小程序真机预览包体优化

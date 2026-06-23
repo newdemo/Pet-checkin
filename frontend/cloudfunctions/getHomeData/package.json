@@ -1,0 +1,9 @@
+{
+  "name": "getHomeData",
+  "version": "1.0.0",
+  "description": "P4-3B getHomeData 首页聚合数据云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

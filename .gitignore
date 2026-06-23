@@ -12,6 +12,9 @@ unpackage/
 *.swo
 .hbuilderx/
 
+# WeChat private config
+project.private.config.json
+
 # OS
 .DS_Store
 Thumbs.db
