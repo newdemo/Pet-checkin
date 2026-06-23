@@ -9,20 +9,21 @@
 
 | 指标 | 值 |
 |------|-----|
-| 当前版本 | **v1.9.0** |
+| 当前版本 | **v1.9.1** |
 | 当前阶段 | P4 Cloud & Launch |
-| 当前任务 | P4-3C submitCheckin 云函数开发 |
-| 当前状态 | P4-3A login + P4-3B getHomeData 验收通过；云函数独立部署流程已确立 |
+| 当前任务 | P4-3D reviewCheckin 云函数开发 |
+| 当前状态 | P4-3A login + P4-3B getHomeData + P4-3C submitCheckin 验收通过；云函数独立部署流程已确立 |
 | 项目完成度 | **79.1%（新规则）** |
 | 可运行 | ✅ 是（微信开发者工具） |
 | Mock 闭环 | ✅ 完整 |
-| 云开发 | ✅ login + getHomeData 云函数已部署并验收通过 |
+| 云开发 | ✅ login + getHomeData + submitCheckin 云函数已部署并验收通过 |
 | 真机测试 | ⚠️ 待 P4-3 核心云函数全部完成后真机联调 |
 
 ### 最近完成
 
 | 任务 | 版本 | Commit |
 |------|------|--------|
+| P4-3C submitCheckin 云函数验收通过，已完成 | v1.9.1 | 待提交 |
 | P4-3B getHomeData 云函数验收通过，已完成 | v1.9.0 | 待提交 |
 | P4-3A login 云函数验证增强验收通过，已完成 | v1.8.9 | 待提交 |
 | UX-2D 小程序真机预览包体优化验收通过，已完成 | v1.8.8 | `chore(ux): optimize mini program image assets for preview package` |
@@ -39,14 +40,14 @@
 
 | 字段 | 值 |
 |------|-----|
-| 任务编号 | **P4-3C** |
-| 任务名称 | submitCheckin 云函数开发 |
+| 任务编号 | **P4-3D** |
+| 任务名称 | reviewCheckin 云函数开发 |
 | 状态 | 待开发 |
-| 目标 | 开发 submitCheckin 云函数，接收 taskId + imageUrl，写入 checkinRecords（status=submitted），更新 dailyTasks 状态为 submitted，返回结果 |
+| 目标 | 开发 reviewCheckin 云函数，家长确认/驳回打卡，确认时发放奖励并防重复发奖 |
 
 ### 下一步任务
 
-**P4-3C submitCheckin 云函数开发** — 基于 P4-2A 数据库设计文档，开发打卡提交云函数；完成后进入 P4-3D reviewCheckin
+**P4-3D reviewCheckin 云函数开发** — 基于 P4-2A 数据库设计文档，开发家长审核云函数；完成后进入 P4-4 前端 services 切换
 
 ### 当前技术状态
 
@@ -136,7 +137,7 @@
 |------|------|------|------|
 | P4-1 | **微信云开发环境开通** | 注册/开通云开发，创建数据库集合。AppID 已配置，云开发环境已开通，云环境 ID 已配置。 | 已完成 |
 | P4-2 | **最小数据库集合设计与 login 云函数准备** | P4-2A 正在整理 P4 执行版唯一数据库设计文档：`docs/P4-2A_最小数据库集合设计.md`；P4-2B 仅允许创建 pet、inventory、taskTemplates、dailyTasks、checkinRecords。 | 待验收 |
-| P4-3 | **核心云函数迁移** | P4-3A login + P4-3B getHomeData 验收通过；P4-3C submitCheckin、P4-3D reviewCheckin 待开发。 | 开发中 |
+| P4-3 | **核心云函数迁移** | P4-3A login + P4-3B getHomeData + P4-3C submitCheckin 验收通过；P4-3D reviewCheckin 待开发。 | 开发中 |
 | P4-4 | **前端 services 切换** | 通过环境变量 `DATA_SOURCE=cloud` 切换，保留 Mock 兼容。 | 待开发 |
 | P4-5 | **真机预览与兼容性测试** | iPhone + Android 主流机型。 | 待开发 |
 | P4-6 | **提交微信审核** | 小程序类目审核、隐私协议、合规自查。 | 待开发 |

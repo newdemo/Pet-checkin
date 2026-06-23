@@ -4,6 +4,47 @@
 
 ---
 
+## [v1.9.1] — 2026-06-23
+
+### P4-3C 验收通过 — submitCheckin 云函数开发完成（事务版本）
+
+#### 新增
+
+- **submitCheckin 云函数** — `frontend/cloudfunctions/submitCheckin/`，孩子提交打卡，写入 checkinRecords 并更新 dailyTasks 状态。
+- **事务保证** — 使用 `db.runTransaction` 包裹 checkinRecords 创建和 dailyTasks 更新，确保原子性：任一操作失败则整体回滚，避免产生孤立打卡记录。
+- **状态校验** — 仅 `pending` 状态可提交；`submitted` 返回"等待家长确认"；`approved` 返回"今天已完成"。
+- **openid 校验** — 事务内读取 dailyTasks 文档后代码校验 `task.openid !== OPENID`，防止跨用户操作。
+
+#### 实现细节
+
+| 维度 | 说明 |
+|------|------|
+| 入参 | `{ dailyTaskId: string }` — dailyTasks 集合文档 _id |
+| 事务 API | `db.runTransaction(async transaction => { ... })` |
+| 状态流转 | `pending` → `submitted`（仅记录，不发奖） |
+| checkinRecords | `status: 'submitted'`, `rewardGranted: false` |
+| 失败处理 | 事务内校验失败调用 `transaction.rollback()`；异常 catch 区分 rollback 返回值和系统异常 |
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/cloudfunctions/submitCheckin/index.js` | ✅ 新增（113 行，事务版本） |
+| `frontend/cloudfunctions/submitCheckin/package.json` | ✅ 新增 |
+| `docs/TODO.md` | ✅ 更新版本 v1.9.1、P4-3C 验收通过、断点移至 P4-3D |
+| `docs/开发计划.md` | ✅ 更新阶段状态 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.9.1 条目 |
+
+#### 边界确认
+
+- 未切换 DATA_SOURCE（保持 mock）
+- 未修改前端 UI / 首页视觉
+- 未修改 store / service / 业务逻辑
+- 未修改 login / getHomeData 云函数
+- 构建通过，无新增编译错误
+
+---
+
 ## [v1.9.0] — 2026-06-23
 
 ### P4-3B 验收通过 — getHomeData 云函数开发完成
