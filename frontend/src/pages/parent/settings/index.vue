@@ -52,18 +52,18 @@ const roleStore = useRoleStore()
 const pet = computed(() => petStore.pet)
 const petName = ref('')
 
-function loadData() {
-  petStore.load()
+async function loadData() {
+  await petStore.load()
   petName.value = pet.value.name || ''
 }
 
-function onSave() {
+async function onSave() {
   const name = petName.value.trim()
   if (!name) {
     uni.showToast({ title: '请输入宠物名称', icon: 'none' })
     return
   }
-  const result = petStore.saveName(name)
+  const result = await petStore.saveName(name)
   if (result.ok) {
     uni.showToast({ title: result.message, icon: 'success' })
   } else {
@@ -71,8 +71,8 @@ function onSave() {
   }
 }
 
-function goBackToChild() {
-  roleStore.switchTo('child')
+async function goBackToChild() {
+  await roleStore.switchTo('child')
   uni.switchTab({ url: '/pages/home/index' })
 }
 

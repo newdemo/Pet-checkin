@@ -14,21 +14,21 @@ export const usePetStore = defineStore('pet', () => {
     mood: 80
   })
 
-  function load() {
-    const data = getAppData()
+  async function load() {
+    const data = await getAppData()
     pet.value = { ...data.pet }
   }
 
-  function performAction(actionType) {
-    const result = performPetAction(actionType)
+  async function performAction(actionType) {
+    const result = await performPetAction(actionType)
     if (result.ok) {
       pet.value = { ...result.pet }
     }
     return result
   }
 
-  function saveName(name) {
-    const result = savePetName(name)
+  async function saveName(name) {
+    const result = await savePetName(name)
     if (result.ok) {
       pet.value.name = name.trim()
     }

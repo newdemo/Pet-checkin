@@ -10,8 +10,8 @@ export const useInventoryStore = defineStore('inventory', () => {
     toy: 0
   })
 
-  function load() {
-    const data = getAppData()
+  async function load() {
+    const data = await getAppData()
     inventory.value = { ...data.inventory }
   }
 

@@ -62,13 +62,13 @@ function rewardLabel(type) {
   return ITEM_LABELS[type] || type
 }
 
-function loadTemplates() {
-  tasksStore.loadTaskTemplates()
+async function loadTemplates() {
+  await tasksStore.loadTaskTemplates()
 }
 
-function onToggle(templateId, e) {
+async function onToggle(templateId, e) {
   const enabled = e.detail.value
-  tasksStore.toggleTaskTemplate(templateId, enabled)
+  await tasksStore.toggleTaskTemplate(templateId, enabled)
   uni.showToast({ title: enabled ? '已开启' : '已关闭', icon: 'none' })
 }
 
@@ -87,8 +87,8 @@ function onCloseModal() {
   editingTemplate.value = null
 }
 
-function onSaveTemplate(formData) {
-  const result = tasksStore.saveTaskTemplate(formData)
+async function onSaveTemplate(formData) {
+  const result = await tasksStore.saveTaskTemplate(formData)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
@@ -103,9 +103,9 @@ function onRemoveTemplate() {
   uni.showModal({
     title: '确认删除',
     content: `确定要删除「${editingTemplate.value.name}」吗？`,
-    success(res) {
+    async success(res) {
       if (!res.confirm) return
-      const result = tasksStore.deleteTaskTemplate(editingTemplate.value.id)
+      const result = await tasksStore.deleteTaskTemplate(editingTemplate.value.id)
       if (result.ok) {
         modalVisible.value = false
         editingTemplate.value = null
@@ -121,9 +121,9 @@ function onReset() {
   uni.showModal({
     title: '确认重置',
     content: '将清空本地数据并恢复初始状态',
-    success(res) {
+    async success(res) {
       if (res.confirm) {
-        tasksStore.resetAllData()
+        await tasksStore.resetAllData()
         uni.showToast({ title: '已重置', icon: 'success' })
       }
     }
@@ -134,8 +134,8 @@ function goSettings() {
   uni.navigateTo({ url: '/pages/parent/settings/index' })
 }
 
-function goBackToChild() {
-  roleStore.switchTo('child')
+async function goBackToChild() {
+  await roleStore.switchTo('child')
   uni.switchTab({ url: '/pages/home/index' })
 }
 

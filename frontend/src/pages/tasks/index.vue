@@ -37,12 +37,12 @@ const todayLabel = computed(() => {
 
 const doneCount = computed(() => tasks.value.filter((t) => t.status === 'done').length)
 
-function loadTasks() {
-  tasksStore.loadDailyTasks()
+async function loadTasks() {
+  await tasksStore.loadDailyTasks()
 }
 
-function onComplete(taskId) {
-  const result = tasksStore.submitCheckin(taskId)
+async function onComplete(taskId) {
+  const result = await tasksStore.submitCheckin(taskId)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return

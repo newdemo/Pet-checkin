@@ -5,12 +5,12 @@ import { switchRole as doSwitchRole, getRole } from '../services/storage'
 export const useRoleStore = defineStore('role', () => {
   const role = ref('child')
 
-  function load() {
-    role.value = getRole()
+  async function load() {
+    role.value = await getRole()
   }
 
-  function switchTo(roleValue) {
-    const result = doSwitchRole(roleValue)
+  async function switchTo(roleValue) {
+    const result = await doSwitchRole(roleValue)
     if (result.ok) {
       role.value = roleValue
     }

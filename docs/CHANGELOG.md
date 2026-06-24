@@ -4,6 +4,59 @@
 
 ---
 
+## [v1.9.2] — 2026-06-23
+
+### P4-3D 开发完成 — reviewCheckin 云函数开发完成（事务版本）
+
+#### 新增
+
+- **reviewCheckin 云函数** — `frontend/cloudfunctions/reviewCheckin/`，家长确认/驳回打卡，确认时发放奖励并防重复发奖。
+- **事务保证** — 使用 `db.runTransaction` 包裹 checkinRecords 更新、dailyTasks 更新和 inventory 奖励发放，确保原子性：任一操作失败则整体回滚。
+- **approve 审批通过** — `submitted` → `approved`，写入 `reviewedAt`、`reviewedBy`，发放奖励（`_.inc` 原子递增 inventory 对应字段），防重复发奖（`rewardGranted` 标记）。
+- **reject 驳回** — `submitted` → `rejected`，写入 `reviewer`、`reviewedBy`、`reviewedAt`、`rejectReason`，dailyTasks 状态回退为 `pending`，清空 `checkinRecordId` 和 `submittedAt`，不发奖励。**设计意图：驳回后 dailyTasks 回到 pending，允许孩子重新提交打卡。**
+- **审批人字段** — approve 和 reject 两个分支均同时写入 `reviewer: OPENID` 和 `reviewedBy: OPENID`，与数据库设计文档中 checkinRecords 字段定义保持一致。
+- **安全校验** — OPENID 必须存在、checkinId 必须存在、action 仅允许 `approve`/`reject`、驳回必须填写原因、openid 归属校验、status 状态校验、rewardGranted 防重复发奖校验。
+
+#### 实现细节
+
+| 维度 | 说明 |
+|------|------|
+| 入参 | `{ checkinId: string, action: 'approve'|'reject', rejectReason?: string }` |
+| 事务 API | `db.runTransaction(async transaction => { ... })` |
+| approve 状态流转 | checkinRecords: `submitted` → `approved`；dailyTasks: `submitted` → `approved` |
+| reject 状态流转 | checkinRecords: `submitted` → `rejected`；dailyTasks: `submitted` → `pending` |
+| 奖励发放 | `_.inc(rewardAmount)` 原子递增 inventory 对应字段 |
+| 防重复发奖 | 双重保护：status !== 'submitted' 拦截 + rewardGranted 标记拦截 |
+| 失败处理 | 事务内校验失败调用 `transaction.rollback()`；异常 catch 区分 rollback 返回值和系统异常 |
+
+#### 涉及文件
+
+| 文件 | 操作 |
+|------|------|
+| `frontend/cloudfunctions/reviewCheckin/index.js` | ✅ 新增（183 行，事务版本） |
+| `frontend/cloudfunctions/reviewCheckin/package.json` | ✅ 新增 |
+| `docs/TODO.md` | ✅ 更新版本 v1.9.2、P4-3 待验收、完成度待复核、断点移至 P4-4 |
+| `docs/开发计划.md` | ✅ 更新阶段状态、P4-3 待验收 |
+| `docs/CHANGELOG.md` | ✅ 新增 v1.9.2 条目 |
+
+#### 收尾修正（2026-06-23）
+
+- **审批人字段补齐** — approve 和 reject 两个分支均同时写入 `reviewer: OPENID` 和 `reviewedBy: OPENID`，与 [P4-2A 数据库设计](file:///Users/zs/Desktop/Trae_实验室/宠物打卡/docs/P4-2A_最小数据库集合设计.md) 中 checkinRecords 字段定义保持一致。
+- **reject 状态流转说明** — 明确 reject 后 `checkinRecords.status: submitted → rejected`，`dailyTasks.status: submitted → pending`，设计意图是允许孩子重新提交打卡。
+- **完成度修正** — 旧规则 79.1%，新增 reviewCheckin 后不应下降，标记为「完成度待按新规则复核」，避免出现"完成任务但完成度下降"的假象。
+
+#### 边界确认
+
+- 未切换 DATA_SOURCE（保持 mock）
+- 未修改前端 UI / 首页视觉
+- 未修改 store / service / 业务逻辑
+- 未修改 login / getHomeData / submitCheckin 云函数
+- 未修改 Dream 素材目录
+- 未修改 storage.js / initialData.js
+- 构建通过，无新增编译错误
+
+---
+
 ## [v1.9.1] — 2026-06-23
 
 ### P4-3C 验收通过 — submitCheckin 云函数开发完成（事务版本）

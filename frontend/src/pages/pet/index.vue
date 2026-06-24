@@ -296,30 +296,30 @@ function clampPercent(value) {
   return Math.min(100, Math.max(0, Math.round(value)))
 }
 
-function loadData() {
+async function loadData() {
   try {
     initAppData()
-    petStore.load()
-    inventoryStore.load()
-    tasksStore.loadAll()
+    await petStore.load()
+    await inventoryStore.load()
+    await tasksStore.loadAll()
   } catch (e) {
     console.error('pet page loadData failed', e)
     uni.showToast({ title: '数据加载失败', icon: 'none' })
   }
 }
 
-function onAction(type) {
+async function onAction(type) {
   const itemMap = { feed: 'food', wash: 'soap', play: 'toy' }
   if ((inventory.value[itemMap[type]] || 0) < 1) {
     uni.showToast({ title: '完成任务可获得更多道具', icon: 'none' })
     return
   }
-  const result = petStore.performAction(type)
+  const result = await petStore.performAction(type)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
   }
-  inventoryStore.load()
+  await inventoryStore.load()
   const labelMap = { feed: '喂食', wash: '清洁', play: '陪玩' }
   if (result.leveledUp) {
     upgradeLevel.value = pet.value.level

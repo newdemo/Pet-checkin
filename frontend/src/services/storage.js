@@ -2,6 +2,8 @@ import { createInitialData } from './initialData'
 import { formatDate, getRecentDates } from '../utils/date'
 import { usePetItem } from './pet'
 import { ITEM_LABELS } from '../constants/pet'
+import { DATA_SOURCE } from '../constants/config'
+import * as cloudService from './cloudService'
 
 const STORAGE_KEY = 'pet_checkin_data'
 
@@ -72,11 +74,28 @@ function loadAndPrepareData() {
   return data
 }
 
-export function initAppData() {
+export async function initAppData() {
+  if (DATA_SOURCE === 'cloud') {
+    return cloudService.login()
+  }
   return loadAndPrepareData()
 }
 
-export function getAppData() {
+export async function getAppData() {
+  if (DATA_SOURCE === 'cloud') {
+    const homeData = await cloudService.getHomeData()
+    return {
+      pet: homeData.pet,
+      inventory: homeData.inventory,
+      dailyTasks: homeData.dailyTasks,
+      taskTemplates: [],
+      streakStat: { currentStreak: 0, longestStreak: 0, totalCompleted: 0, lastCheckinDate: null },
+      dailySummaries: [],
+      history: [],
+      role: 'child',
+      taskDate: ''
+    }
+  }
   if (!memoryCache) {
     const stored = readStorage()
     if (!stored) return loadAndPrepareData()
@@ -130,8 +149,11 @@ function ensureDailyTasks(data, today) {
   data.taskDate = today
 }
 
-export function getHomeData() {
-  const data = getAppData()
+export async function getHomeData() {
+  if (DATA_SOURCE === 'cloud') {
+    return cloudService.getHomeData()
+  }
+  const data = await getAppData()
   const todayTasks = data.dailyTasks.filter((t) => t.taskDate === data.taskDate)
   const doneCount = todayTasks.filter((t) => t.status === 'done').length
   const waitingCount = todayTasks.filter((t) => t.status === 'waiting').length
@@ -147,8 +169,11 @@ export function getHomeData() {
   }
 }
 
-export function getDailyTasks() {
-  const data = getAppData()
+export async function getDailyTasks() {
+  if (DATA_SOURCE === 'cloud') {
+    return cloudService.getDailyTasks()
+  }
+  const data = await getAppData()
   return [...data.dailyTasks.filter((t) => t.taskDate === data.taskDate)]
 }
 
@@ -156,8 +181,11 @@ export function getDailyTasks() {
  * 孩子打卡：仅将任务标记为待确认，不发放奖励。
  * 奖励在家长确认通过后由 reviewCheckin 发放。
  */
-export function submitCheckin(taskId) {
-  const data = getAppData()
+export async function submitCheckin(taskId) {
+  if (DATA_SOURCE === 'cloud') {
+    return cloudService.submitCheckin(taskId)
+  }
+  const data = await getAppData()
   const task = data.dailyTasks.find((t) => t.id === taskId)
   if (!task) return { ok: false, message: '任务不存在' }
   if (task.status === 'done') return { ok: false, message: '今天已经完成过啦' }
@@ -172,8 +200,11 @@ export function submitCheckin(taskId) {
 /**
  * 家长审核：确认通过发放奖励并更新记录；驳回则回退为未完成。
  */
-export function reviewCheckin(taskId, approved) {
-  const data = getAppData()
+export async function reviewCheckin(taskId, approved) {
+  if (DATA_SOURCE === 'cloud') {
+    return cloudService.reviewCheckinByTaskId(taskId, approved)
+  }
+  const data = await getAppData()
   const task = data.dailyTasks.find((t) => t.id === taskId)
   if (!task) return { ok: false, message: '任务不存在' }
   if (task.status !== 'waiting') return { ok: false, message: '该任务不在待确认状态' }
@@ -216,8 +247,8 @@ export function reviewCheckin(taskId, approved) {
 /**
  * 获取当日所有待家长确认的任务。
  */
-export function getPendingConfirmations() {
-  const data = getAppData()
+export async function getPendingConfirmations() {
+  const data = await getAppData()
   return data.dailyTasks.filter((t) => t.taskDate === data.taskDate && t.status === 'waiting')
 }
 
@@ -264,8 +295,8 @@ function updateDailySummary(data, today) {
   data.dailySummaries = data.dailySummaries.slice(0, 30)
 }
 
-export function performPetAction(actionType) {
-  const data = getAppData()
+export async function performPetAction(actionType) {
+  const data = await getAppData()
   const result = usePetItem(data.pet, data.inventory, actionType)
   if (!result.ok) return result
 
@@ -275,8 +306,8 @@ export function performPetAction(actionType) {
   return result
 }
 
-export function getRecordData() {
-  const data = getAppData()
+export async function getRecordData() {
+  const data = await getAppData()
   const recentDates = getRecentDates(7)
   const summaryMap = {}
   ;(data.dailySummaries || []).forEach((s) => {
@@ -296,13 +327,13 @@ export function getRecordData() {
   }
 }
 
-export function getTaskTemplates() {
-  const data = getAppData()
+export async function getTaskTemplates() {
+  const data = await getAppData()
   return [...data.taskTemplates].sort((a, b) => a.sortOrder - b.sortOrder)
 }
 
-export function toggleTaskTemplate(templateId, enabled) {
-  const data = getAppData()
+export async function toggleTaskTemplate(templateId, enabled) {
+  const data = await getAppData()
   const tpl = data.taskTemplates.find((t) => t.id === templateId)
   if (!tpl) return { ok: false, message: '任务不存在' }
   tpl.enabled = enabled
@@ -328,8 +359,8 @@ export function resetAllData() {
  * 保存任务模板（新增或编辑）。
  * 若有 id 则为编辑，无 id 则为新增。
  */
-export function saveTaskTemplate(template) {
-  const data = getAppData()
+export async function saveTaskTemplate(template) {
+  const data = await getAppData()
 
   // 基本校验
   if (!template.name || !template.name.trim()) {
@@ -374,11 +405,11 @@ export function saveTaskTemplate(template) {
 /**
  * 设置页：修改宠物名称。
  */
-export function savePetName(name) {
+export async function savePetName(name) {
   if (!name || !name.trim()) {
     return { ok: false, message: '名称不能为空' }
   }
-  const data = getAppData()
+  const data = await getAppData()
   data.pet.name = name.trim()
   writeStorage(data)
   return { ok: true, message: '宠物名称已更新' }
@@ -387,11 +418,11 @@ export function savePetName(name) {
 /**
  * 切换角色。
  */
-export function switchRole(role) {
+export async function switchRole(role) {
   if (role !== 'child' && role !== 'parent') {
     return { ok: false, message: '无效角色' }
   }
-  const data = getAppData()
+  const data = await getAppData()
   data.role = role
   writeStorage(data)
   return { ok: true, message: role === 'parent' ? '已切换为家长模式' : '已切换为孩子模式' }
@@ -400,16 +431,16 @@ export function switchRole(role) {
 /**
  * 获取当前角色。
  */
-export function getRole() {
-  const data = getAppData()
+export async function getRole() {
+  const data = await getAppData()
   return data.role || 'child'
 }
 
 /**
  * 删除任务模板。
  */
-export function deleteTaskTemplate(templateId) {
-  const data = getAppData()
+export async function deleteTaskTemplate(templateId) {
+  const data = await getAppData()
   const idx = data.taskTemplates.findIndex((t) => t.id === templateId)
   if (idx === -1) return { ok: false, message: '任务不存在' }
 

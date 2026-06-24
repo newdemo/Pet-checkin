@@ -63,9 +63,9 @@ function formatDay(dateStr) {
   return `${Number(m)}/${Number(d)}`
 }
 
-function loadData() {
-  petStore.load()
-  tasksStore.loadRecordData()
+async function loadData() {
+  await petStore.load()
+  await tasksStore.loadRecordData()
 }
 
 onShow(() => {

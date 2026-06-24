@@ -51,20 +51,20 @@ function rewardLabel(type) {
   return ITEM_LABELS[type] || type
 }
 
-function loadTasks() {
-  tasksStore.loadDailyTasks()
+async function loadTasks() {
+  await tasksStore.loadDailyTasks()
 }
 
-function onReview(taskId, approved) {
+async function onReview(taskId, approved) {
   const label = approved ? '确认通过' : '驳回'
   uni.showModal({
     title: `确认${label}`,
     content: approved
       ? '确认后奖励将发放给孩子'
       : '驳回后孩子可重新打卡',
-    success(res) {
+    async success(res) {
       if (!res.confirm) return
-      const result = tasksStore.reviewCheckin(taskId, approved)
+      const result = await tasksStore.reviewCheckin(taskId, approved)
       if (result.ok) {
         uni.showToast({ title: result.message, icon: 'success' })
       } else {
@@ -78,8 +78,8 @@ function goTaskManage() {
   uni.navigateTo({ url: '/pages/parent/tasks/index' })
 }
 
-function goBackToChild() {
-  roleStore.switchTo('child')
+async function goBackToChild() {
+  await roleStore.switchTo('child')
   uni.switchTab({ url: '/pages/home/index' })
 }
 

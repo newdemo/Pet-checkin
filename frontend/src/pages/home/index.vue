@@ -126,6 +126,7 @@
 import { ref, computed } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { initAppData } from '../../services/storage'
+import { DATA_SOURCE } from '../../constants/config'
 import { usePetStore } from '../../stores/pet'
 import { useInventoryStore } from '../../stores/inventory'
 import { useTasksStore } from '../../stores/tasks'
@@ -274,30 +275,32 @@ function taskStatusText(status) {
   return textMap[status] || '去照顾'
 }
 
-function loadData() {
+async function loadData() {
   try {
-    initAppData()
-    petStore.load()
-    inventoryStore.load()
-    tasksStore.loadAll()
+    if (DATA_SOURCE !== 'cloud') {
+      await initAppData()
+    }
+    await petStore.load()
+    await inventoryStore.load()
+    await tasksStore.loadAll()
   } catch (e) {
     console.error('home loadData failed', e)
     uni.showToast({ title: '数据加载失败', icon: 'none' })
   }
 }
 
-function onAction(type) {
+async function onAction(type) {
   const itemMap = { feed: 'food', wash: 'soap', play: 'toy' }
   if ((inventory.value[itemMap[type]] || 0) < 1) {
     uni.showToast({ title: '完成任务可获得更多道具', icon: 'none' })
     return
   }
-  const result = petStore.performAction(type)
+  const result = await petStore.performAction(type)
   if (!result.ok) {
     uni.showToast({ title: result.message, icon: 'none' })
     return
   }
-  inventoryStore.load()
+  await inventoryStore.load()
   const labelMap = { feed: '喂食', wash: '清洁', play: '陪玩' }
   if (result.leveledUp) {
     upgradeLevel.value = pet.value.level
@@ -316,9 +319,9 @@ function goParentConfirm() {
     uni.showModal({
       title: '进入家长模式',
       content: '家长模式可以管理任务和确认打卡，确定进入吗？',
-      success(res) {
+      async success(res) {
         if (res.confirm) {
-          roleStore.switchTo('parent')
+          await roleStore.switchTo('parent')
           uni.navigateTo({ url: '/pages/parent/confirm/index' })
         }
       }

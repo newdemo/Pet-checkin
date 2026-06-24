@@ -35,27 +35,27 @@ export const useTasksStore = defineStore('tasks', () => {
   const history = ref([])
   const weekDays = ref([])
 
-  function loadAll() {
-    const homeData = getHomeData()
-    taskTemplates.value = getTaskTemplates()
-    dailyTasks.value = getDailyTasks()
+  async function loadAll() {
+    const homeData = await getHomeData()
+    taskTemplates.value = await getTaskTemplates()
+    dailyTasks.value = await getDailyTasks()
 
-    const recordData = getRecordData()
+    const recordData = await getRecordData()
     streakStat.value = recordData.streakStat
     history.value = recordData.history
     weekDays.value = recordData.weekDays
   }
 
-  function loadTaskTemplates() {
-    taskTemplates.value = getTaskTemplates()
+  async function loadTaskTemplates() {
+    taskTemplates.value = await getTaskTemplates()
   }
 
-  function loadDailyTasks() {
-    dailyTasks.value = [...getDailyTasks()]
+  async function loadDailyTasks() {
+    dailyTasks.value = [...await getDailyTasks()]
   }
 
-  function loadRecordData() {
-    const recordData = getRecordData()
+  async function loadRecordData() {
+    const recordData = await getRecordData()
     streakStat.value = recordData.streakStat
     history.value = recordData.history
     weekDays.value = recordData.weekDays
@@ -77,49 +77,49 @@ export const useTasksStore = defineStore('tasks', () => {
   })
 
   // ---- 操作 ----
-  function submitCheckin(taskId) {
-    const result = doSubmitCheckin(taskId)
+  async function submitCheckin(taskId) {
+    const result = await doSubmitCheckin(taskId)
     if (result.ok) {
-      loadDailyTasks()
+      await loadDailyTasks()
     }
     return result
   }
 
-  function reviewCheckin(taskId, approved) {
-    const result = doReviewCheckin(taskId, approved)
+  async function reviewCheckin(taskId, approved) {
+    const result = await doReviewCheckin(taskId, approved)
     if (result.ok) {
-      loadAll()
+      await loadAll()
     }
     return result
   }
 
-  function toggleTaskTemplate(templateId, enabled) {
-    const result = doToggleTaskTemplate(templateId, enabled)
+  async function toggleTaskTemplate(templateId, enabled) {
+    const result = await doToggleTaskTemplate(templateId, enabled)
     if (result.ok) {
-      loadAll()
+      await loadAll()
     }
     return result
   }
 
-  function saveTaskTemplate(template) {
-    const result = doSaveTaskTemplate(template)
+  async function saveTaskTemplate(template) {
+    const result = await doSaveTaskTemplate(template)
     if (result.ok) {
-      loadAll()
+      await loadAll()
     }
     return result
   }
 
-  function deleteTaskTemplate(templateId) {
-    const result = doDeleteTaskTemplate(templateId)
+  async function deleteTaskTemplate(templateId) {
+    const result = await doDeleteTaskTemplate(templateId)
     if (result.ok) {
-      loadAll()
+      await loadAll()
     }
     return result
   }
 
-  function resetAllData() {
+  async function resetAllData() {
     doResetAllData()
-    loadAll()
+    await loadAll()
     return { ok: true, message: '已重置' }
   }
 
